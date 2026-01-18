@@ -148,7 +148,7 @@ class TestFetchLibraryDois:
                 "identifiers": {"doi": "10.1126/science.abc123"}
             }
         ]
-        mock_response.headers.get.return_value = ''  # No Link header (no pagination)
+        mock_response.links = {}  # No pagination
         mock_get.return_value = mock_response
         
         result = fetch_library_dois("fake_token")
@@ -184,7 +184,7 @@ class TestFetchLibraryDois:
                 "identifiers": {"doi": ""}  # Empty DOI
             }
         ]
-        mock_response.headers.get.return_value = ''
+        mock_response.links = {}  # No pagination
         mock_get.return_value = mock_response
         
         result = fetch_library_dois("fake_token")
@@ -205,7 +205,7 @@ class TestFetchLibraryDois:
                 "identifiers": {"doi": "10.1038/NATURE12345"}  # Mixed case
             }
         ]
-        mock_response.headers.get.return_value = ''
+        mock_response.links = {}  # No pagination
         mock_get.return_value = mock_response
         
         result = fetch_library_dois("fake_token")
@@ -248,8 +248,8 @@ class TestFetchLibraryDois:
                 "identifiers": {"doi": "10.1038/nature22222"}
             }
         ]
-        # Simulate Link header with next page
-        first_response.headers.get.return_value = '<https://api.mendeley.com/documents?limit=100&marker=next_page_marker>; rel="next"'
+        # Set response.links with next page URL
+        first_response.links = {'next': {'url': 'https://api.mendeley.com/documents?limit=100&marker=next_page_marker'}}
         
         # Second page response
         second_response = Mock()
@@ -262,8 +262,8 @@ class TestFetchLibraryDois:
                 "identifiers": {"doi": "10.1038/nature33333"}
             }
         ]
-        # No Link header on last page
-        second_response.headers.get.return_value = ''
+        # No next link on last page
+        second_response.links = {}
         
         # Mock returns different responses on subsequent calls
         mock_get.side_effect = [first_response, second_response]
@@ -294,17 +294,14 @@ class TestFetchLibraryDois:
                 "identifiers": {"doi": "10.1038/nature12345"}
             }
         ]
-        # Link header with multiple entries, including 'next'
-        response.headers.get.return_value = (
-            '<https://api.mendeley.com/documents?limit=100&marker=prev>; rel="prev", '
-            '<https://api.mendeley.com/documents?limit=100&marker=next_marker>; rel="next"'
-        )
+        # response.links with next page (this is how requests parses Link headers)
+        response.links = {'next': {'url': 'https://api.mendeley.com/documents?limit=100&marker=next_marker'}}
         
         # Second response without next link
         second_response = Mock()
         second_response.status_code = 200
         second_response.json.return_value = []
-        second_response.headers.get.return_value = ''
+        second_response.links = {}  # No next link
         
         mock_get.side_effect = [response, second_response]
         

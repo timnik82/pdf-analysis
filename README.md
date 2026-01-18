@@ -154,7 +154,8 @@ pytest tests/test_extract_sections.py::TestFuzzyMatchSection::test_exact_match_i
 
 ### Test Coverage
 
-**extract_sections.py tests (45 tests)**:
+**extract_sections.py tests (41 tests)**:
+
 - `fuzzy_match_section` - Section header matching with variations
 - `extract_doi` - DOI extraction from text
 - `clean_content` - Content cleaning and noise removal
@@ -162,6 +163,7 @@ pytest tests/test_extract_sections.py::TestFuzzyMatchSection::test_exact_match_i
 - `extract_sections_from_markdown` - End-to-end section extraction
 
 **check_mendeley_dois_v2.py tests (18 tests)**:
+
 - `check_dois` - DOI matching against library (case-insensitive, whitespace handling)
 - `fetch_library_dois` - API interaction (mocked), including pagination support
 - `save_results` - JSON output formatting
