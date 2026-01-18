@@ -126,6 +126,49 @@ The present article provides an overview of the latest advancements...
 - `requests` - HTTP client for Mendeley API
 - `python-dotenv` - Environment variable management
 
+## Testing
+
+This repository includes comprehensive test coverage for core functionality.
+
+### Running Tests
+
+```bash
+# Install test dependencies
+pip install -r requirements.txt
+
+# Run all tests
+pytest
+
+# Run tests with verbose output
+pytest -v
+
+# Run specific test file
+pytest tests/test_extract_sections.py
+
+# Run specific test class
+pytest tests/test_extract_sections.py::TestFuzzyMatchSection
+
+# Run specific test
+pytest tests/test_extract_sections.py::TestFuzzyMatchSection::test_exact_match_introduction
+```
+
+### Test Coverage
+
+**extract_sections.py tests (45 tests)**:
+- `fuzzy_match_section` - Section header matching with variations
+- `extract_doi` - DOI extraction from text
+- `clean_content` - Content cleaning and noise removal
+- `detect_section_by_content` - Content-based section detection
+- `extract_sections_from_markdown` - End-to-end section extraction
+
+**check_mendeley_dois_v2.py tests (18 tests)**:
+- `check_dois` - DOI matching against library (case-insensitive, whitespace handling)
+- `fetch_library_dois` - API interaction (mocked), including pagination support
+- `save_results` - JSON output formatting
+- `print_results` - Console output formatting
+
+All tests are organized in the `tests/` directory with clear, descriptive names and comprehensive edge case coverage.
+
 ## License
 
 MIT
