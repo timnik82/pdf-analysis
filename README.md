@@ -161,9 +161,9 @@ pytest tests/test_extract_sections.py::TestFuzzyMatchSection::test_exact_match_i
 - `detect_section_by_content` - Content-based section detection
 - `extract_sections_from_markdown` - End-to-end section extraction
 
-**check_mendeley_dois_v2.py tests (16 tests)**:
+**check_mendeley_dois_v2.py tests (18 tests)**:
 - `check_dois` - DOI matching against library (case-insensitive, whitespace handling)
-- `fetch_library_dois` - API interaction (mocked)
+- `fetch_library_dois` - API interaction (mocked), including pagination support
 - `save_results` - JSON output formatting
 - `print_results` - Console output formatting
 

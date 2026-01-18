@@ -227,6 +227,95 @@ class TestFetchLibraryDois:
             fetch_library_dois("fake_token")
         
         assert "Failed to fetch documents" in str(excinfo.value)
+    
+    @patch('check_mendeley_dois_v2.requests.get')
+    def test_fetch_library_dois_pagination(self, mock_get):
+        """Test that pagination works correctly with multiple pages"""
+        # First page response
+        first_response = Mock()
+        first_response.status_code = 200
+        first_response.json.return_value = [
+            {
+                "id": "doc1",
+                "title": "Paper 1",
+                "year": 2023,
+                "identifiers": {"doi": "10.1038/nature11111"}
+            },
+            {
+                "id": "doc2",
+                "title": "Paper 2",
+                "year": 2023,
+                "identifiers": {"doi": "10.1038/nature22222"}
+            }
+        ]
+        # Simulate Link header with next page
+        first_response.headers.get.return_value = '<https://api.mendeley.com/documents?limit=100&marker=next_page_marker>; rel="next"'
+        
+        # Second page response
+        second_response = Mock()
+        second_response.status_code = 200
+        second_response.json.return_value = [
+            {
+                "id": "doc3",
+                "title": "Paper 3",
+                "year": 2024,
+                "identifiers": {"doi": "10.1038/nature33333"}
+            }
+        ]
+        # No Link header on last page
+        second_response.headers.get.return_value = ''
+        
+        # Mock returns different responses on subsequent calls
+        mock_get.side_effect = [first_response, second_response]
+        
+        result = fetch_library_dois("fake_token")
+        
+        # Should have collected DOIs from both pages
+        assert len(result) == 3
+        assert "10.1038/nature11111" in result
+        assert "10.1038/nature22222" in result
+        assert "10.1038/nature33333" in result
+        assert result["10.1038/nature11111"]["title"] == "Paper 1"
+        assert result["10.1038/nature33333"]["title"] == "Paper 3"
+        
+        # Verify requests.get was called twice (once per page)
+        assert mock_get.call_count == 2
+    
+    @patch('check_mendeley_dois_v2.requests.get')
+    def test_fetch_library_dois_pagination_multiple_links(self, mock_get):
+        """Test pagination with multiple links in Link header"""
+        # Response with multiple links in Link header
+        response = Mock()
+        response.status_code = 200
+        response.json.return_value = [
+            {
+                "id": "doc1",
+                "title": "Paper 1",
+                "identifiers": {"doi": "10.1038/nature12345"}
+            }
+        ]
+        # Link header with multiple entries, including 'next'
+        response.headers.get.return_value = (
+            '<https://api.mendeley.com/documents?limit=100&marker=prev>; rel="prev", '
+            '<https://api.mendeley.com/documents?limit=100&marker=next_marker>; rel="next"'
+        )
+        
+        # Second response without next link
+        second_response = Mock()
+        second_response.status_code = 200
+        second_response.json.return_value = []
+        second_response.headers.get.return_value = ''
+        
+        mock_get.side_effect = [response, second_response]
+        
+        result = fetch_library_dois("fake_token")
+        
+        # Should parse the 'next' link correctly even with multiple links
+        assert len(result) == 1
+        assert mock_get.call_count == 2
+        # Verify second call used the extracted next URL
+        second_call_url = mock_get.call_args_list[1][0][0]
+        assert 'next_marker' in second_call_url
 
 
 class TestSaveResults:
