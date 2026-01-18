@@ -123,7 +123,7 @@ The present article provides an overview of the latest advancements...
 
 - `pymupdf4llm` - PDF to Markdown conversion
 - `rapidfuzz` - Fuzzy string matching for section headers
-- `mendeley` - Mendeley API Python SDK
+- `requests` - HTTP client for Mendeley API
 - `python-dotenv` - Environment variable management
 
 ## License

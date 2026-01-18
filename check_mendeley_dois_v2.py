@@ -97,13 +97,18 @@ def get_access_token() -> str:
                     'client_id': CLIENT_ID,
                     'client_secret': CLIENT_SECRET,
                     'redirect_uri': REDIRECT_URI
-                })
+                }, timeout=30)
                 
                 if response.status_code == 200:
                     new_token_data = response.json()
-                    # Save new token
+                    # Preserve refresh_token if not returned by API
+                    if 'refresh_token' not in new_token_data:
+                        new_token_data['refresh_token'] = token_data['refresh_token']
+                    # Save new token with secure permissions
                     with open(TOKEN_FILE, 'w') as f:
                         json.dump(new_token_data, f)
+                    if os.name != 'nt':  # Not Windows
+                        os.chmod(TOKEN_FILE, 0o600)
                     print("✓ Token refreshed successfully\n")
                     return new_token_data['access_token']
                 else:
@@ -157,16 +162,18 @@ def get_access_token() -> str:
         'redirect_uri': REDIRECT_URI,
         'client_id': CLIENT_ID,
         'client_secret': CLIENT_SECRET
-    })
+    }, timeout=30)
     
     if token_response.status_code != 200:
-        raise Exception(f"Token exchange failed: {token_response.text}")
+        raise requests.exceptions.RequestException(f"Token exchange failed: {token_response.text}")
     
     token_data = token_response.json()
     
-    # Save token for future use
+    # Save token for future use with secure permissions
     with open(TOKEN_FILE, 'w') as f:
         json.dump(token_data, f)
+    if os.name != 'nt':  # Not Windows
+        os.chmod(TOKEN_FILE, 0o600)
     
     print("✓ Authentication successful! Token saved for future use.\n")
     
@@ -196,10 +203,10 @@ def fetch_library_dois(access_token: str) -> Dict[str, Dict]:
     
     # Paginate through all documents
     while url:
-        response = requests.get(url, headers=headers, params={'limit': 100})
+        response = requests.get(url, headers=headers, params={'limit': 100}, timeout=30)
         
         if response.status_code != 200:
-            raise Exception(f"Failed to fetch documents: {response.text}")
+            raise requests.exceptions.RequestException(f"Failed to fetch documents: {response.text}")
         
         documents = response.json()
         
@@ -220,15 +227,8 @@ def fetch_library_dois(access_token: str) -> Dict[str, Dict]:
                     'id': doc.get('id')
                 }
         
-        # Check for next page
-        link_header = response.headers.get('Link', '')
-        url = None
-        if 'rel="next"' in link_header:
-            # Parse Link header to get next URL
-            for link in link_header.split(','):
-                if 'rel="next"' in link:
-                    url = link.split(';')[0].strip('<> ')
-                    break
+        # Check for next page using response.links for robustness
+        url = response.links.get('next', {}).get('url')
     
     print(f"✓ Found {total_docs} total documents in library")
     print(f"✓ {len(library_docs)} documents have DOIs\n")

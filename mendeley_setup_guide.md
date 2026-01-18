@@ -39,7 +39,7 @@ This guide will walk you through setting up Mendeley API access for the DOI chec
 1. Navigate to your project directory:
 
    ```bash
-   cd /Users/timnik/Coding/pdf-analysis
+   cd path/to/pdf-analysis
    ```
 
 2. Create a `.env` file (copy from the example):
@@ -62,13 +62,13 @@ This guide will walk you through setting up Mendeley API access for the DOI chec
 ## Step 4: Install Python Dependencies
 
 ```bash
-pip install mendeley python-dotenv
+pip install -r requirements.txt
 ```
 
-Or install from requirements.txt:
+Or install manually:
 
 ```bash
-pip install -r requirements.txt
+pip install requests python-dotenv
 ```
 
 ---
@@ -80,7 +80,7 @@ The first time you run the script, you'll need to authenticate:
 1. Run the script:
 
    ```bash
-   python check_mendeley_dois.py
+   python check_mendeley_dois_v2.py --interactive
    ```
 
 2. The script will:
