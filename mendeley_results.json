@@ -1,0 +1,86 @@
+{
+  "summary": {
+    "total_checked": 55,
+    "found_in_library": 4,
+    "not_in_library": 51
+  },
+  "in_library": [
+    {
+      "doi": "10.1002/ADVS.202001274",
+      "title": "Carbon-Based Composite Phase Change Materials for Thermal Energy Storage, Transfer, and Conversion",
+      "year": 2021,
+      "mendeley_id": "39de921d-d569-35d2-9d73-ada95423f7ae"
+    },
+    {
+      "doi": "10.1016/j.nanoms.2023.09.003",
+      "title": "Recent advances in graphene-based phase change composites for thermal energy storage and management",
+      "year": 2024,
+      "mendeley_id": "6b93f59e-7c74-34b8-affd-702b583252da"
+    },
+    {
+      "doi": "10.1038/s41598-018-27038-4",
+      "title": "Fabrication and thermal properties of tetradecanol/graphene aerogel form-stable composite phase change materials",
+      "year": 2018,
+      "mendeley_id": "89a5bd89-5635-3dad-ab89-bf1482c11547"
+    },
+    {
+      "doi": "10.1039/D0TA09035B",
+      "title": "The design of phase change materials with carbon aerogel composites for multi-responsive thermal energy capture and storage",
+      "year": 2021,
+      "mendeley_id": "c4ac079a-be0d-3c96-a2a6-c2f680dd7161"
+    }
+  ],
+  "not_in_library": [
+    "10.1002/adfm.202212032",
+    "10.1002/adma.201801754",
+    "10.1002/adma.202202457",
+    "10.1002/adma.202309723",
+    "10.1002/aenm.202204208",
+    "10.1002/cey2.218",
+    "10.1002/sus2.147",
+    "10.1007/s12274-016-1333-1",
+    "10.1007/s42114-022-00519-x",
+    "10.1007/s42114-022-00620-1",
+    "10.1007/s42114-023-00655-y",
+    "10.1016/j.apenergy.2018.12.075",
+    "10.1016/j.apenergy.2023.122546",
+    "10.1016/j.applthermaleng.2019.03.140",
+    "10.1016/j.applthermaleng.2019.114493",
+    "10.1016/j.carbon.2018.10.083",
+    "10.1016/j.cej.2019.122373",
+    "10.1016/j.cej.2021.130605",
+    "10.1016/j.compositesa.2021.106703",
+    "10.1016/j.compscitech.2020.108197",
+    "10.1016/j.conbuildmat.2023.132877",
+    "10.1016/j.enbuild.2022.112384",
+    "10.1016/j.enbuild.2023.112898",
+    "10.1016/j.energy.2022.125463",
+    "10.1016/j.est.2018.11.007",
+    "10.1016/j.est.2019.100874",
+    "10.1016/j.est.2021.102329",
+    "10.1016/j.est.2021.103929",
+    "10.1016/j.est.2022.104166",
+    "10.1016/j.est.2022.106361",
+    "10.1016/j.est.2023.106772",
+    "10.1016/j.est.2023.107713",
+    "10.1016/j.est.2023.108280",
+    "10.1016/j.est.2024.111329",
+    "10.1016/j.est.2024.111570",
+    "10.1016/j.jcis.2022.09.103",
+    "10.1016/j.jclepro.2022.133031",
+    "10.1016/j.mtsust.2023.100336",
+    "10.1016/j.mtsust.2023.100658",
+    "10.1016/j.rser.2023.113546",
+    "10.1016/j.seta.2021.101646",
+    "10.1016/j.solener.2017.03.013",
+    "10.1016/j.solmat.2021.111083",
+    "10.1016/j.solmat.2022.111896",
+    "10.1021/acsami.8b09541",
+    "10.1021/acsami.9b16612",
+    "10.1021/acsnano.1c08581",
+    "10.1039/c9ta13925g",
+    "10.1080/09506608.2022.2053774",
+    "10.1080/15583724.2023.2220041",
+    "10.3390/su142013240"
+  ]
+}
