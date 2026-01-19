@@ -10,7 +10,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Optional
+from typing import Optional, cast
 from urllib.parse import quote as url_quote
 
 
@@ -87,7 +87,7 @@ def run_mendeley_check(dois: list) -> Optional[dict]:
             return None
 
         with open(output_file, "r", encoding="utf-8") as f:
-            return json.load(f)  # type: ignore[no-any-return]
+            return cast(dict, json.load(f))
 
     except (json.JSONDecodeError, FileNotFoundError) as e:
         print(f"Error processing Mendeley check: {e}", file=sys.stderr)
