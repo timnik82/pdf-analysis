@@ -14,9 +14,7 @@ Usage:
 import os
 import json
 import argparse
-import webbrowser
 from typing import List, Dict, Tuple
-from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, urlencode
 import requests
 from dotenv import load_dotenv
@@ -34,38 +32,6 @@ TOKEN_FILE = 'mendeley_token.json'
 AUTH_URL = 'https://api.mendeley.com/oauth/authorize'
 TOKEN_URL = 'https://api.mendeley.com/oauth/token'
 DOCUMENTS_URL = 'https://api.mendeley.com/documents'
-
-
-class AuthHandler(BaseHTTPRequestHandler):
-    """Simple HTTP server to capture OAuth callback"""
-    
-    auth_code = None
-    
-    def do_GET(self):
-        """Handle the OAuth redirect"""
-        query = urlparse(self.path).query
-        params = parse_qs(query)
-        
-        if 'code' in params:
-            AuthHandler.auth_code = params['code'][0]
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(b"""
-                <html>
-                <body>
-                    <h1>Authentication Successful!</h1>
-                    <p>You can close this window and return to the terminal.</p>
-                </body>
-                </html>
-            """)
-        else:
-            self.send_response(400)
-            self.end_headers()
-    
-    def log_message(self, format, *args):
-        """Suppress log messages"""
-        pass
 
 
 def get_access_token() -> str:

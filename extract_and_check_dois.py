@@ -3,6 +3,7 @@
 Extract DOIs from markdown file and check against Mendeley library
 """
 
+import html
 import re
 import sys
 import json
@@ -79,7 +80,7 @@ def generate_html_table(results: dict, output_html: str):
     found_count = results['summary']['found_in_library']
     missing_count = results['summary']['not_in_library']
     
-    html = f'''<!DOCTYPE html>
+    html_content = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -145,18 +146,20 @@ def generate_html_table(results: dict, output_html: str):
     # Add found DOIs
     if in_library:
         for doc in in_library:
-            doi_url = f"https://doi.org/{doc['doi']}"
-            year_str = f" ({doc['year']})" if doc.get('year') else ""
-            html += f'''                    <li class="doi-item">
-                        <a href="{doi_url}" class="doi-link" target="_blank">{doc['doi']}</a>
-                        <div class="doi-title">{doc['title']}</div>
+            doi_escaped = html.escape(doc['doi'])
+            title_escaped = html.escape(doc['title'])
+            doi_url = html.escape(f"https://doi.org/{doc['doi']}", quote=True)
+            year_str = f" ({html.escape(str(doc['year']))})" if doc.get('year') else ""
+            html_content += f'''                    <li class="doi-item">
+                        <a href="{doi_url}" class="doi-link" target="_blank">{doi_escaped}</a>
+                        <div class="doi-title">{title_escaped}</div>
                         <div class="doi-meta">{year_str}</div>
                     </li>
 '''
     else:
-        html += '                    <li class="empty-message">No DOIs found in library</li>\n'
+        html_content += '                    <li class="empty-message">No DOIs found in library</li>\n'
     
-    html += f'''                </ul>
+    html_content += f'''                </ul>
             </div>
             
             <div class="column not-in-library">
@@ -167,15 +170,16 @@ def generate_html_table(results: dict, output_html: str):
     # Add missing DOIs
     if not_in_library:
         for doi in not_in_library:
-            doi_url = f"https://doi.org/{doi}"
-            html += f'''                    <li class="doi-item">
-                        <a href="{doi_url}" class="doi-link" target="_blank">{doi}</a>
+            doi_escaped = html.escape(doi)
+            doi_url = html.escape(f"https://doi.org/{doi}", quote=True)
+            html_content += f'''                    <li class="doi-item">
+                        <a href="{doi_url}" class="doi-link" target="_blank">{doi_escaped}</a>
                     </li>
 '''
     else:
-        html += '                    <li class="empty-message">All DOIs are in your library! 🎉</li>\n'
+        html_content += '                    <li class="empty-message">All DOIs are in your library! 🎉</li>\n'
     
-    html += '''                </ul>
+    html_content += '''                </ul>
             </div>
         </div>
     </div>
@@ -185,7 +189,7 @@ def generate_html_table(results: dict, output_html: str):
     
     # Write HTML file
     with open(output_html, 'w', encoding='utf-8') as f:
-        f.write(html)
+        f.write(html_content)
     
     print(f"\n✓ HTML table generated: {output_html}")
 
