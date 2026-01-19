@@ -14,9 +14,7 @@ Usage:
 import os
 import json
 import argparse
-import webbrowser
 from typing import List, Dict, Tuple
-from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, urlencode
 import requests
 from dotenv import load_dotenv
@@ -34,38 +32,6 @@ TOKEN_FILE = 'mendeley_token.json'
 AUTH_URL = 'https://api.mendeley.com/oauth/authorize'
 TOKEN_URL = 'https://api.mendeley.com/oauth/token'
 DOCUMENTS_URL = 'https://api.mendeley.com/documents'
-
-
-class AuthHandler(BaseHTTPRequestHandler):
-    """Simple HTTP server to capture OAuth callback"""
-    
-    auth_code = None
-    
-    def do_GET(self):
-        """Handle the OAuth redirect"""
-        query = urlparse(self.path).query
-        params = parse_qs(query)
-        
-        if 'code' in params:
-            AuthHandler.auth_code = params['code'][0]
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(b"""
-                <html>
-                <body>
-                    <h1>Authentication Successful!</h1>
-                    <p>You can close this window and return to the terminal.</p>
-                </body>
-                </html>
-            """)
-        else:
-            self.send_response(400)
-            self.end_headers()
-    
-    def log_message(self, format, *args):
-        """Suppress log messages"""
-        pass
 
 
 def get_access_token() -> str:
@@ -129,7 +95,6 @@ def get_access_token() -> str:
     
     # Perform new OAuth flow
     print("\n=== Mendeley Authentication ===")
-    print("Opening browser for authentication...")
     
     # Build authorization URL
     auth_params = {
@@ -140,19 +105,24 @@ def get_access_token() -> str:
     }
     login_url = f"{AUTH_URL}?{urlencode(auth_params)}"
     
-    # Open browser
-    webbrowser.open(login_url)
+    print("\n1. Open this URL in your browser:")
+    print(f"\n   {login_url}\n")
+    print("2. Log in to Mendeley and authorize the app")
+    print("3. After authorization, you'll be redirected to a page that may not load")
+    print("4. Copy the ENTIRE URL from your browser's address bar")
+    print("   (it will look like: http://localhost:8080?code=XXXXX...)")
+    print("\nPaste the redirect URL here and press Enter:")
     
-    # Start local server to capture callback
-    server = HTTPServer(('localhost', 8080), AuthHandler)
-    print(f"\nWaiting for authentication callback at {REDIRECT_URI}")
-    print("Please complete the login in your browser...")
+    redirect_url = input("> ").strip()
     
-    # Wait for callback
-    while AuthHandler.auth_code is None:
-        server.handle_request()
+    # Extract auth code from URL
+    query = urlparse(redirect_url).query
+    params = parse_qs(query)
     
-    auth_code = AuthHandler.auth_code
+    if 'code' not in params:
+        raise ValueError("Could not find 'code' parameter in the URL. Please try again.")
+    
+    auth_code = params['code'][0]
     
     # Exchange code for token
     print("\nExchanging authorization code for access token...")
