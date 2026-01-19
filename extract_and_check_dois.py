@@ -4,13 +4,15 @@ Extract DOIs from markdown file and check against Mendeley library
 """
 
 import html
-import re
-import sys
 import json
+import re
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
+from typing import Optional
 from urllib.parse import quote as url_quote
+
 
 def extract_dois_from_markdown(md_file: str) -> list:
     """Extract all DOIs from markdown file"""
@@ -35,7 +37,7 @@ def extract_dois_from_markdown(md_file: str) -> list:
     
     return sorted(list(dois))
 
-def run_mendeley_check(dois: list) -> dict:
+def run_mendeley_check(dois: list) -> Optional[dict]:
     """Run the Mendeley check script and return results"""
     # Create temporary files safely
     temp_file = None
@@ -79,7 +81,7 @@ def run_mendeley_check(dois: list) -> dict:
             return None
         
         with open(output_file, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            return json.load(f)  # type: ignore[no-any-return]
     
     except (json.JSONDecodeError, FileNotFoundError) as e:
         print(f"Error processing Mendeley check: {e}", file=sys.stderr)

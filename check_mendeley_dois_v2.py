@@ -11,11 +11,12 @@ Usage:
     python check_mendeley_dois_v2.py --interactive
 """
 
-import os
-import json
 import argparse
-from typing import List, Dict, Tuple
-from urllib.parse import urlparse, parse_qs, urlencode
+import json
+import os
+from typing import Dict, List, Tuple
+from urllib.parse import parse_qs, urlencode, urlparse
+
 import requests
 from dotenv import load_dotenv
 
@@ -76,9 +77,9 @@ def get_access_token() -> str:
                     if os.name != 'nt':  # Not Windows
                         os.chmod(TOKEN_FILE, 0o600)
                     print("✓ Token refreshed successfully\n")
-                    return new_token_data['access_token']
+                    return new_token_data['access_token']  # type: ignore[no-any-return]
                 else:
-                    print(f"⚠ Token refresh failed, re-authenticating...")
+                    print("⚠ Token refresh failed, re-authenticating...")
                     os.remove(TOKEN_FILE)
             else:
                 # Old token format, try to use it
@@ -87,7 +88,7 @@ def get_access_token() -> str:
                     os.remove(TOKEN_FILE)
                 else:
                     print("✓ Using saved token")
-                    return token_data['access_token']
+                    return token_data['access_token']  # type: ignore[no-any-return]
         except Exception as e:
             print(f"⚠ Error with saved token: {e}, re-authenticating...")
             if os.path.exists(TOKEN_FILE):
@@ -147,7 +148,7 @@ def get_access_token() -> str:
     
     print("✓ Authentication successful! Token saved for future use.\n")
     
-    return token_data['access_token']
+    return token_data['access_token']  # type: ignore[no-any-return]
 
 
 def fetch_library_dois(access_token: str) -> Dict[str, Dict]:

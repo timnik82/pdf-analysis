@@ -1,7 +1,8 @@
-import os
 import json
-import pymupdf4llm
+import os
 import re
+
+import pymupdf4llm
 from rapidfuzz import fuzz
 
 # =============================================================================
@@ -305,7 +306,7 @@ def extract_sections_from_markdown(markdown_text):
         # Find the next boundary after this match
         end_index = len(markdown_text)
         
-        for boundary_start, boundary_type, _ in extracted_boundaries:
+        for boundary_start, _boundary_type, _ in extracted_boundaries:
             if boundary_start > match_start + 10:  # Buffer to avoid self-match
                 end_index = boundary_start
                 break
@@ -448,7 +449,7 @@ def process_pdfs(pdf_dir, output_file):
     markdown_file = output_file.replace('.json', '.md')
     export_to_markdown(results, markdown_file)
     
-    print(f"\n✓ Extraction complete. Output files:")
+    print("\n✓ Extraction complete. Output files:")
     print(f"  - {output_file} (JSON, for programmatic access)")
     print(f"  - {markdown_file} (Markdown, for LLM analysis)")
 
