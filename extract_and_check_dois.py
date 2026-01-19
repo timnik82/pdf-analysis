@@ -8,6 +8,7 @@ import re
 import sys
 import json
 import subprocess
+import tempfile
 from pathlib import Path
 
 def extract_dois_from_markdown(md_file: str) -> list:
@@ -35,40 +36,60 @@ def extract_dois_from_markdown(md_file: str) -> list:
 
 def run_mendeley_check(dois: list) -> dict:
     """Run the Mendeley check script and return results"""
-    # Create temporary file with DOIs
-    temp_file = Path('temp_dois.txt')
-    output_file = Path('mendeley_results.json')
+    # Create temporary files safely
+    temp_file = None
+    output_file = None
     
     try:
-        # Write DOIs to file
-        with open(temp_file, 'w') as f:
-            f.write('\n'.join(dois))
+        # Create temp file for DOIs using tempfile module
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as tf:
+            tf.write('\n'.join(dois))
+            temp_file = Path(tf.name)
+        
+        # Create temp file for output
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as of:
+            output_file = Path(of.name)
+        
+        # Get absolute path to check script
+        script_path = Path(__file__).resolve().parent / 'check_mendeley_dois_v2.py'
         
         # Run the check script
         result = subprocess.run(
-            ['python3', 'check_mendeley_dois_v2.py', 
+            [sys.executable, str(script_path), 
              '--file', str(temp_file), 
              '--output', str(output_file)],
             capture_output=True,
-            text=True
+            text=True,
+            check=False
         )
         
         print(result.stdout)
         if result.stderr:
             print(result.stderr, file=sys.stderr)
         
-        # Read results
-        if output_file.exists():
-            with open(output_file, 'r') as f:
-                return json.load(f)
-        else:
-            print("No results file generated")
+        # Check for errors
+        if result.returncode != 0:
+            print("Mendeley check script failed.", file=sys.stderr)
             return None
+        
+        # Read results
+        if not output_file.exists():
+            print("No results file generated", file=sys.stderr)
+            return None
+        
+        with open(output_file, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    
+    except (json.JSONDecodeError, FileNotFoundError) as e:
+        print(f"Error processing Mendeley check: {e}", file=sys.stderr)
+        return None
     
     finally:
         # Clean up temp files
-        if temp_file.exists():
+        if temp_file and temp_file.exists():
             temp_file.unlink()
+        if output_file and output_file.exists():
+            output_file.unlink()
 
 def generate_html_table(results: dict, output_html: str):
     """Generate HTML table with clickable DOI links"""
@@ -199,6 +220,11 @@ def main():
         sys.exit(1)
     
     md_file = Path(sys.argv[1])
+    
+    # Validate file exists
+    if not md_file.exists():
+        print(f"Error: File not found: {md_file}")
+        sys.exit(1)
     
     # Extract DOIs
     print(f"Extracting DOIs from {md_file}...")
