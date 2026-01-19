@@ -10,6 +10,7 @@ import json
 import subprocess
 import tempfile
 from pathlib import Path
+from urllib.parse import quote as url_quote
 
 def extract_dois_from_markdown(md_file: str) -> list:
     """Extract all DOIs from markdown file"""
@@ -28,8 +29,8 @@ def extract_dois_from_markdown(md_file: str) -> list:
     for pattern in doi_patterns:
         matches = re.findall(pattern, content)
         for match in matches:
-            # Clean up the DOI
-            doi = match.strip().rstrip(')')
+            # Clean up the DOI - strip trailing punctuation
+            doi = match.strip().rstrip(').,;:')
             dois.add(doi)
     
     return sorted(list(dois))
@@ -169,7 +170,7 @@ def generate_html_table(results: dict, output_html: str):
         for doc in in_library:
             doi_escaped = html.escape(doc['doi'])
             title_escaped = html.escape(doc['title'])
-            doi_url = html.escape(f"https://doi.org/{doc['doi']}", quote=True)
+            doi_url = f"https://doi.org/{url_quote(doc['doi'], safe='')}"
             year_str = f" ({html.escape(str(doc['year']))})" if doc.get('year') else ""
             html_content += f'''                    <li class="doi-item">
                         <a href="{doi_url}" class="doi-link" target="_blank">{doi_escaped}</a>
@@ -192,7 +193,7 @@ def generate_html_table(results: dict, output_html: str):
     if not_in_library:
         for doi in not_in_library:
             doi_escaped = html.escape(doi)
-            doi_url = html.escape(f"https://doi.org/{doi}", quote=True)
+            doi_url = f"https://doi.org/{url_quote(doi, safe='')}"
             html_content += f'''                    <li class="doi-item">
                         <a href="{doi_url}" class="doi-link" target="_blank">{doi_escaped}</a>
                     </li>
