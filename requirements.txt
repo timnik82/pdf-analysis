@@ -1,3 +1,17 @@
 pymupdf4llm
 rapidfuzz>=0.0.1
 pymupdf>=1.24.0
+
+# Mendeley API (v2 script uses requests directly, not the deprecated SDK)
+requests>=2.32.0
+python-dotenv
+
+# Testing
+pytest>=7.4.0
+pytest-mock>=3.12.0
+
+# Linting and Type-checking
+ruff>=0.8.0
+mypy>=1.8.0
+types-requests>=2.32.0
+
