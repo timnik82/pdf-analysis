@@ -22,3 +22,5 @@ Thumbs.db
 # Project specific
 extracted_sections.json
 extracted_sections.md
+.env
+mendeley_token.json
