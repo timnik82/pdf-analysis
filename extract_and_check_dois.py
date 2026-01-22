@@ -145,7 +145,7 @@ def generate_html_table(results: dict, output_html: str):
         .doi-checkbox {{ margin-right: 15px; transform: scale(1.5); cursor: pointer; }}
         .doi-item.checked {{ opacity: 0.6; background: #e9ecef; }}
         .doi-item.checked .doi-link {{ text-decoration: line-through; color: #95a5a6; }}
-        .doi-flex {{ display: flex; align-items: start; }}
+        .doi-flex {{ display: flex; align-items: flex-start; }}
         .doi-content {{ flex: 1; }}
         @media (max-width: 968px) {{ .table-container {{ grid-template-columns: 1fr; }} }}
         .empty-message {{ text-align: center; color: #95a5a6; padding: 40px 20px; font-style: italic; }}
@@ -187,7 +187,7 @@ def generate_html_table(results: dict, output_html: str):
             doi_url = f"https://doi.org/{url_quote(doc['doi'], safe='')}"
             year_str = f" ({html.escape(str(doc['year']))})" if doc.get("year") else ""
             html_content += f'''                    <li class="doi-item">
-                        <a href="{doi_url}" class="doi-link" target="_blank">{doi_escaped}</a>
+                        <a href="{doi_url}" class="doi-link" target="_blank" rel="noopener noreferrer">{doi_escaped}</a>
                         <div class="doi-title">{title_escaped}</div>
                         <div class="doi-meta">{year_str}</div>
                     </li>
@@ -209,11 +209,11 @@ def generate_html_table(results: dict, output_html: str):
             doi_escaped = html.escape(doi)
             doi_url = f"https://doi.org/{url_quote(doi, safe='')}"
             doi_id = f"check_{url_quote(doi, safe='')}"  # Safe ID for checkbox
-            html_content += f'''                    <li class="doi-item" data-doi="{doi_id}">
+            html_content += f'''                    <li class="doi-item">
                         <div class="doi-flex">
-                            <input type="checkbox" id="{doi_id}" class="doi-checkbox">
+                            <input type="checkbox" id="{doi_id}" class="doi-checkbox" aria-labelledby="doi_{doi_id}">
                             <div class="doi-content">
-                                <a href="{doi_url}" class="doi-link" target="_blank">{doi_escaped}</a>
+                                <a href="{doi_url}" class="doi-link" id="doi_{doi_id}" target="_blank" rel="noopener noreferrer">{doi_escaped}</a>
                             </div>
                         </div>
                     </li>
@@ -231,7 +231,13 @@ def generate_html_table(results: dict, output_html: str):
             const storageKey = 'mendeley_seen_dois';
             
             // Load saved state
-            const savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            let savedState = {};
+            try {
+                savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            } catch (e) {
+                console.warn('Invalid saved DOI state; resetting', e);
+                savedState = {};
+            }
             
             checkboxes.forEach(checkbox => {
                 const doiId = checkbox.id;
@@ -247,14 +253,17 @@ def generate_html_table(results: dict, output_html: str):
                     // Update state object
                     if (this.checked) {
                         savedState[doiId] = true;
-                        this.closest('.doi-item').classList.add('checked');
                     } else {
                         delete savedState[doiId];
-                        this.closest('.doi-item').classList.remove('checked');
                     }
+                    this.closest('.doi-item').classList.toggle('checked', this.checked);
                     
                     // Save to local storage
-                    localStorage.setItem(storageKey, JSON.stringify(savedState));
+                    try {
+                        localStorage.setItem(storageKey, JSON.stringify(savedState));
+                    } catch (e) {
+                        console.warn('Unable to persist DOI state', e);
+                    }
                 });
             });
         });

@@ -32,7 +32,7 @@
         .doi-checkbox { margin-right: 15px; transform: scale(1.5); cursor: pointer; }
         .doi-item.checked { opacity: 0.6; background: #e9ecef; }
         .doi-item.checked .doi-link { text-decoration: line-through; color: #95a5a6; }
-        .doi-flex { display: flex; align-items: start; }
+        .doi-flex { display: flex; align-items: flex-start; }
         .doi-content { flex: 1; }
         @media (max-width: 968px) { .table-container { grid-template-columns: 1fr; } }
         .empty-message { text-align: center; color: #95a5a6; padding: 40px 20px; font-style: italic; }
@@ -65,7 +65,7 @@
                 <h2>✓ Already in Library <span class="count-badge">1</span></h2>
                 <ul class="doi-list">
                     <li class="doi-item">
-                        <a href="https://doi.org/10.000%2Fexisting.paper" class="doi-link" target="_blank">10.000/existing.paper</a>
+                        <a href="https://doi.org/10.000%2Fexisting.paper" class="doi-link" target="_blank" rel="noopener noreferrer">10.000/existing.paper</a>
                         <div class="doi-title">A Paper Already in Your Library</div>
                         <div class="doi-meta"> (2023)</div>
                     </li>
@@ -75,35 +75,35 @@
             <div class="column not-in-library">
                 <h2>✗ Not in Library <span class="count-badge">4</span></h2>
                 <ul class="doi-list">
-                    <li class="doi-item" data-doi="check_10.000%2Fnew.paper.1">
+                    <li class="doi-item">
                         <div class="doi-flex">
-                            <input type="checkbox" id="check_10.000%2Fnew.paper.1" class="doi-checkbox">
+                            <input type="checkbox" id="check_10.000%2Fnew.paper.1" class="doi-checkbox" aria-labelledby="doi_check_10.000%2Fnew.paper.1">
                             <div class="doi-content">
-                                <a href="https://doi.org/10.000%2Fnew.paper.1" class="doi-link" target="_blank">10.000/new.paper.1</a>
+                                <a href="https://doi.org/10.000%2Fnew.paper.1" class="doi-link" id="doi_check_10.000%2Fnew.paper.1" target="_blank" rel="noopener noreferrer">10.000/new.paper.1</a>
                             </div>
                         </div>
                     </li>
-                    <li class="doi-item" data-doi="check_10.000%2Fnew.paper.2">
+                    <li class="doi-item">
                         <div class="doi-flex">
-                            <input type="checkbox" id="check_10.000%2Fnew.paper.2" class="doi-checkbox">
+                            <input type="checkbox" id="check_10.000%2Fnew.paper.2" class="doi-checkbox" aria-labelledby="doi_check_10.000%2Fnew.paper.2">
                             <div class="doi-content">
-                                <a href="https://doi.org/10.000%2Fnew.paper.2" class="doi-link" target="_blank">10.000/new.paper.2</a>
+                                <a href="https://doi.org/10.000%2Fnew.paper.2" class="doi-link" id="doi_check_10.000%2Fnew.paper.2" target="_blank" rel="noopener noreferrer">10.000/new.paper.2</a>
                             </div>
                         </div>
                     </li>
-                    <li class="doi-item" data-doi="check_10.000%2Fnew.paper.3">
+                    <li class="doi-item">
                         <div class="doi-flex">
-                            <input type="checkbox" id="check_10.000%2Fnew.paper.3" class="doi-checkbox">
+                            <input type="checkbox" id="check_10.000%2Fnew.paper.3" class="doi-checkbox" aria-labelledby="doi_check_10.000%2Fnew.paper.3">
                             <div class="doi-content">
-                                <a href="https://doi.org/10.000%2Fnew.paper.3" class="doi-link" target="_blank">10.000/new.paper.3</a>
+                                <a href="https://doi.org/10.000%2Fnew.paper.3" class="doi-link" id="doi_check_10.000%2Fnew.paper.3" target="_blank" rel="noopener noreferrer">10.000/new.paper.3</a>
                             </div>
                         </div>
                     </li>
-                    <li class="doi-item" data-doi="check_10.000%2Fnew.paper.4">
+                    <li class="doi-item">
                         <div class="doi-flex">
-                            <input type="checkbox" id="check_10.000%2Fnew.paper.4" class="doi-checkbox">
+                            <input type="checkbox" id="check_10.000%2Fnew.paper.4" class="doi-checkbox" aria-labelledby="doi_check_10.000%2Fnew.paper.4">
                             <div class="doi-content">
-                                <a href="https://doi.org/10.000%2Fnew.paper.4" class="doi-link" target="_blank">10.000/new.paper.4</a>
+                                <a href="https://doi.org/10.000%2Fnew.paper.4" class="doi-link" id="doi_check_10.000%2Fnew.paper.4" target="_blank" rel="noopener noreferrer">10.000/new.paper.4</a>
                             </div>
                         </div>
                     </li>
@@ -117,7 +117,13 @@
             const storageKey = 'mendeley_seen_dois';
             
             // Load saved state
-            const savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            let savedState = {};
+            try {
+                savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            } catch (e) {
+                console.warn('Invalid saved DOI state; resetting', e);
+                savedState = {};
+            }
             
             checkboxes.forEach(checkbox => {
                 const doiId = checkbox.id;
@@ -133,14 +139,17 @@
                     // Update state object
                     if (this.checked) {
                         savedState[doiId] = true;
-                        this.closest('.doi-item').classList.add('checked');
                     } else {
                         delete savedState[doiId];
-                        this.closest('.doi-item').classList.remove('checked');
                     }
+                    this.closest('.doi-item').classList.toggle('checked', this.checked);
                     
                     // Save to local storage
-                    localStorage.setItem(storageKey, JSON.stringify(savedState));
+                    try {
+                        localStorage.setItem(storageKey, JSON.stringify(savedState));
+                    } catch (e) {
+                        console.warn('Unable to persist DOI state', e);
+                    }
                 });
             });
         });
