@@ -225,45 +225,57 @@ def generate_html_table(results: dict, output_html: str):
             </div>
         </div>
     </div>
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBh8GiX8Eg39d_LrXA8IoWGtL6dRUi0Wa0",
+            authDomain: "pdf-analysis-doi-tracker.firebaseapp.com",
+            projectId: "pdf-analysis-doi-tracker",
+            storageBucket: "pdf-analysis-doi-tracker.firebasestorage.app",
+            messagingSenderId: "838114802019",
+            appId: "1:838114802019:web:be36a8d9d94a253fd93b56"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('.doi-checkbox');
-            const storageKey = 'mendeley_seen_dois';
-            
-            // Load saved state
-            let savedState = {};
-            try {
-                savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
-            } catch (e) {
-                console.warn('Invalid saved DOI state; resetting', e);
-                savedState = {};
-            }
+            const dbRef = ref(database, 'checked_dois');
+
+            // Listen for changes in the database
+            onValue(dbRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                
+                checkboxes.forEach(checkbox => {
+                    const doiId = checkbox.id;
+                    const doiKey = doiId.replace('check_', ''); // We use the sanitized check ID as the key or we can use the ID itself. 
+                                                              // Actually let's just use the checkbox ID as the key in DB for simplicity.
+                    
+                    if (data[doiId]) {
+                        checkbox.checked = true;
+                        checkbox.closest('.doi-item').classList.add('checked');
+                    } else {
+                        checkbox.checked = false;
+                        checkbox.closest('.doi-item').classList.remove('checked');
+                    }
+                });
+            });
             
             checkboxes.forEach(checkbox => {
-                const doiId = checkbox.id;
-                
-                // Restore state
-                if (savedState[doiId]) {
-                    checkbox.checked = true;
-                    checkbox.closest('.doi-item').classList.add('checked');
-                }
-                
-                // Add change listener
                 checkbox.addEventListener('change', function() {
-                    // Update state object
-                    if (this.checked) {
-                        savedState[doiId] = true;
-                    } else {
-                        delete savedState[doiId];
-                    }
-                    this.closest('.doi-item').classList.toggle('checked', this.checked);
+                    const doiId = this.id;
+                    const itemRef = ref(database, 'checked_dois/' + doiId);
                     
-                    // Save to local storage
-                    try {
-                        localStorage.setItem(storageKey, JSON.stringify(savedState));
-                    } catch (e) {
-                        console.warn('Unable to persist DOI state', e);
+                    if (this.checked) {
+                        set(itemRef, true).catch(err => console.error("Error writing to DB", err));
+                    } else {
+                        remove(itemRef).catch(err => console.error("Error removing from DB", err));
                     }
+                    // UI update is handled by the onValue listener to ensure consistency
                 });
             });
         });
