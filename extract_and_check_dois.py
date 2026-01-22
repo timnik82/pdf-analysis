@@ -135,6 +135,16 @@ def generate_html_table(results: dict, output_html: str):
     found_count = results["summary"]["found_in_library"]
     missing_count = results["summary"]["not_in_library"]
 
+    mock_banner = ""
+    if results.get("is_mock"):
+        mock_banner = """
+        <div style="background-color: #fff3cd; color: #856404; padding: 15px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ffeeba; text-align: center;">
+            <strong>⚠ DEMO MODE:</strong> Data verification skipped (Auth Missing). Results are simulated.
+            <br>
+            <span style="font-size: 0.9em">Firebase sync features are fully functional.</span>
+        </div>
+        """
+
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -177,6 +187,7 @@ def generate_html_table(results: dict, output_html: str):
 </head>
 <body>
     <div class="container">
+        {mock_banner}
         <h1>📚 Mendeley DOI Check Results</h1>
         
         <div class="summary">
