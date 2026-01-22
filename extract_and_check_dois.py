@@ -134,7 +134,7 @@ def load_firebase_config() -> dict:
             "Please create firebase-config.json with your Firebase project settings."
         )
     with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        return cast(dict, json.load(f))
 
 
 def generate_html_table(results: dict, output_html: str):
