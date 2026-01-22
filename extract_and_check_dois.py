@@ -125,8 +125,29 @@ def run_mendeley_check(dois: list) -> Optional[dict]:
             output_file.unlink()
 
 
+def load_firebase_config() -> dict:
+    """Load Firebase configuration from firebase-config.json"""
+    config_path = Path(__file__).resolve().parent / "firebase-config.json"
+    if not config_path.exists():
+        raise FileNotFoundError(
+            f"Firebase config not found at {config_path}. "
+            "Please create firebase-config.json with your Firebase project settings."
+        )
+    with open(config_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 def generate_html_table(results: dict, output_html: str):
     """Generate HTML table with clickable DOI links"""
+
+    # Load Firebase config
+    try:
+        firebase_config = load_firebase_config()
+        firebase_config_json = json.dumps(firebase_config, indent=12)
+    except FileNotFoundError as e:
+        print(f"Warning: {e}")
+        print("Firebase sync will be disabled in the generated report.")
+        firebase_config_json = None
 
     in_library = results.get("in_library", [])
     not_in_library = results.get("not_in_library", [])
@@ -188,6 +209,7 @@ def generate_html_table(results: dict, output_html: str):
 <body>
     <div class="container">
         {mock_banner}
+        <div id="auth-status" style="text-align: center; margin-bottom: 20px; color: #666; font-size: 0.9em;">Connecting to sync service...</div>
         <h1>📚 Mendeley DOI Check Results</h1>
         
         <div class="summary">
@@ -259,109 +281,152 @@ def generate_html_table(results: dict, output_html: str):
     else:
         html_content += '                    <li class="empty-message">All DOIs are in your library! 🎉</li>\n'
 
-    html_content += """                </ul>
-            </div>
-        </div>
-    </div>
-    <div id="auth-status" style="text-align: center; margin-bottom: 20px; color: #666; font-size: 0.9em;">Authenticating...</div>
-
+    # Generate Firebase script or fallback to localStorage
+    if firebase_config_json:
+        firebase_script = f"""
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-        import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+        import {{ initializeApp }} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import {{ getDatabase, ref, onValue, set, remove }} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+        import {{ getAuth, signInAnonymously, onAuthStateChanged }} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBh8GiX8Eg39d_LrXA8IoWGtL6dRUi0Wa0",
-            authDomain: "pdf-analysis-doi-tracker.firebaseapp.com",
-            databaseURL: "https://pdf-analysis-doi-tracker-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "pdf-analysis-doi-tracker",
-            storageBucket: "pdf-analysis-doi-tracker.firebasestorage.app",
-            messagingSenderId: "838114802019",
-            appId: "1:838114802019:web:be36a8d9d94a253fd93b56"
-        };
+        const firebaseConfig = {firebase_config_json};
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const auth = getAuth(app);
-        
+
         const authStatus = document.getElementById('auth-status');
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {{
             const checkboxes = document.querySelectorAll('.doi-checkbox');
             let dbRef = null;
             let unsubscribe = null;
 
             // Monitor Auth State
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    authStatus.textContent = `✓ Connected as ${user.uid.substring(0,6)}... (Session Scoped)`;
+            onAuthStateChanged(auth, (user) => {{
+                if (user) {{
+                    authStatus.textContent = `✓ Connected as ${{user.uid.substring(0,6)}}... (Session Scoped)`;
                     authStatus.style.color = 'green';
-                    
-                    const userRefPath = `checked_dois/${user.uid}`;
+
+                    const userRefPath = `checked_dois/${{user.uid}}`;
                     dbRef = ref(database, userRefPath);
 
                     // Listen for changes
-                    unsubscribe = onValue(dbRef, (snapshot) => {
-                        const data = snapshot.val() || {};
-                        
-                        checkboxes.forEach(checkbox => {
+                    unsubscribe = onValue(dbRef, (snapshot) => {{
+                        const data = snapshot.val() || {{}};
+
+                        checkboxes.forEach(checkbox => {{
                             const doiId = checkbox.id;
-                            if (data[doiId]) {
+                            if (data[doiId]) {{
                                 checkbox.checked = true;
                                 checkbox.closest('.doi-item').classList.add('checked');
-                            } else {
+                            }} else {{
                                 checkbox.checked = false;
                                 checkbox.closest('.doi-item').classList.remove('checked');
-                            }
-                        });
-                    }, (error) => {
+                            }}
+                        }});
+                    }}, (error) => {{
                          console.error("Database Error:", error);
                          authStatus.textContent = "⚠ Database Error: " + error.message;
                          authStatus.style.color = 'red';
-                    });
+                    }});
 
-                } else {
+                }} else {{
                     authStatus.textContent = "○ Disconnected";
                     authStatus.style.color = '#666';
                     // Clear checkboxes
-                    checkboxes.forEach(checkbox => {
+                    checkboxes.forEach(checkbox => {{
                         checkbox.checked = false;
                         checkbox.closest('.doi-item').classList.remove('checked');
-                    });
-                }
-            });
+                    }});
+                }}
+            }});
 
             // Sign in anonymously
-            signInAnonymously(auth).catch((error) => {
+            signInAnonymously(auth).catch((error) => {{
                 console.error("Auth Error:", error);
                 authStatus.textContent = "⚠ Auth Error: " + error.message;
                 authStatus.style.color = 'red';
-            });
-            
+            }});
+
             // Checkbox logic
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    if (!auth.currentUser) {
+            checkboxes.forEach(checkbox => {{
+                checkbox.addEventListener('change', function() {{
+                    if (!auth.currentUser) {{
                         console.warn("User not signed in, cannot save.");
                         alert("Please wait for connection...");
                         this.checked = !this.checked; // Revert
                         return;
-                    }
+                    }}
 
                     const doiId = this.id;
-                    const itemRef = ref(database, `checked_dois/${auth.currentUser.uid}/${doiId}`);
-                    
-                    if (this.checked) {
+                    const itemRef = ref(database, `checked_dois/${{auth.currentUser.uid}}/${{doiId}}`);
+
+                    if (this.checked) {{
                         set(itemRef, true).catch(err => console.error("Error writing to DB", err));
-                    } else {
+                    }} else {{
                         remove(itemRef).catch(err => console.error("Error removing from DB", err));
-                    }
+                    }}
                     // UI update handled by listener
+                }});
+            }});
+        }});
+    </script>"""
+    else:
+        # Fallback to localStorage when Firebase is not configured
+        firebase_script = """
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.doi-checkbox');
+            const storageKey = 'mendeley_checked_dois';
+            const authStatus = document.getElementById('auth-status');
+
+            authStatus.textContent = '○ Local storage mode (Firebase not configured)';
+            authStatus.style.color = '#666';
+
+            // Load saved state
+            let savedState = {};
+            try {
+                savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            } catch (e) {
+                console.warn('Invalid saved state, resetting', e);
+                savedState = {};
+            }
+
+            checkboxes.forEach(checkbox => {
+                const doiId = checkbox.id;
+
+                // Restore state
+                if (savedState[doiId]) {
+                    checkbox.checked = true;
+                    checkbox.closest('.doi-item').classList.add('checked');
+                }
+
+                // Add change listener
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        savedState[doiId] = true;
+                    } else {
+                        delete savedState[doiId];
+                    }
+                    this.closest('.doi-item').classList.toggle('checked', this.checked);
+
+                    try {
+                        localStorage.setItem(storageKey, JSON.stringify(savedState));
+                    } catch (e) {
+                        console.warn('Unable to persist state', e);
+                    }
                 });
             });
         });
-    </script>
+    </script>"""
+
+    html_content += f"""                </ul>
+            </div>
+        </div>
+    </div>
+{firebase_script}
 </body>
 </html>
 """
@@ -409,6 +474,7 @@ def main():
             },
             "in_library": [],
             "not_in_library": dois,
+            "is_mock": True,
         }
 
     # Generate HTML table in the same directory as the input file
