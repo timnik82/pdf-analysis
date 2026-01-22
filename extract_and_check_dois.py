@@ -253,6 +253,7 @@ def generate_html_table(results: dict, output_html: str):
         const firebaseConfig = {
             apiKey: "AIzaSyBh8GiX8Eg39d_LrXA8IoWGtL6dRUi0Wa0",
             authDomain: "pdf-analysis-doi-tracker.firebaseapp.com",
+            databaseURL: "https://pdf-analysis-doi-tracker-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "pdf-analysis-doi-tracker",
             storageBucket: "pdf-analysis-doi-tracker.firebasestorage.app",
             messagingSenderId: "838114802019",
