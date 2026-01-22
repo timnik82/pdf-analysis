@@ -49,8 +49,12 @@ def run_mendeley_check(dois: list) -> Optional[dict]:
     if not token_file.exists():
         print("\n" + "!" * 80)
         print("ERROR: Mendeley authentication token missing!")
-        print("The check script needs to be authenticated before it can run in the background.")
-        print("\nPlease run this command manually in your terminal once to authenticate:")
+        print(
+            "The check script needs to be authenticated before it can run in the background."
+        )
+        print(
+            "\nPlease run this command manually in your terminal once to authenticate:"
+        )
         print(f"\n   {sys.executable} check_mendeley_dois_v2.py --interactive")
         print("\n" + "!" * 80 + "\n")
         return None
@@ -82,12 +86,14 @@ def run_mendeley_check(dois: list) -> Optional[dict]:
                 capture_output=True,
                 text=True,
                 check=False,
-                timeout=120, # 2 minute timeout
+                timeout=120,  # 2 minute timeout
             )
         except subprocess.TimeoutExpired:
             print("\nError: Mendeley check script timed out after 120 seconds.")
             print("This usually happens if the script is waiting for user input.")
-            print("Please run the script manually to ensure it's not prompting for something.")
+            print(
+                "Please run the script manually to ensure it's not prompting for something."
+            )
             return None
 
         print(result.stdout)
@@ -226,9 +232,9 @@ def generate_html_table(results: dict, output_html: str):
         for doi in not_in_library:
             doi_escaped = html.escape(doi)
             doi_url = f"https://doi.org/{url_quote(doi, safe='')}"
-            # Firebase keys cannot contain '.', '#', '$', '[', ']'. 
+            # Firebase keys cannot contain '.', '#', '$', '[', ']'.
             # url_quote leaves '.' by default. We must replace it.
-            safe_id_suffix = url_quote(doi, safe='').replace('.', '_')
+            safe_id_suffix = url_quote(doi, safe="").replace(".", "_")
             doi_id = f"check_{safe_id_suffix}"
             html_content += f'''                    <li class="doi-item">
                         <div class="doi-flex">
@@ -392,7 +398,7 @@ def main():
                 "not_in_library": len(dois),
             },
             "in_library": [],
-            "not_in_library": dois
+            "not_in_library": dois,
         }
 
     # Generate HTML table in the same directory as the input file
