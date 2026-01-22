@@ -252,7 +252,6 @@ def generate_html_table(results: dict, output_html: str):
             </div>
         </div>
     </div>
-    <script type="module">
     <div id="auth-status" style="text-align: center; margin-bottom: 20px; color: #666; font-size: 0.9em;">Authenticating...</div>
 
     <script type="module">
