@@ -29,6 +29,11 @@
         .doi-title { color: #2c3e50; font-size: 0.9em; margin-top: 5px; line-height: 1.4; }
         .doi-meta { color: #7f8c8d; font-size: 0.85em; margin-top: 5px; }
         .count-badge { display: inline-block; background: rgba(255, 255, 255, 0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; margin-left: 10px; }
+        .doi-checkbox { margin-right: 15px; transform: scale(1.5); cursor: pointer; }
+        .doi-item.checked { opacity: 0.6; background: #e9ecef; }
+        .doi-item.checked .doi-link { text-decoration: line-through; color: #95a5a6; }
+        .doi-flex { display: flex; align-items: flex-start; }
+        .doi-content { flex: 1; }
         @media (max-width: 968px) { .table-container { grid-template-columns: 1fr; } }
         .empty-message { text-align: center; color: #95a5a6; padding: 40px 20px; font-style: italic; }
     </style>
@@ -60,22 +65,22 @@
                 <h2>✓ Already in Library <span class="count-badge">4</span></h2>
                 <ul class="doi-list">
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1002/ADVS.202001274" class="doi-link" target="_blank">10.1002/ADVS.202001274</a>
+                        <a href="https://doi.org/10.1002%2FADVS.202001274" class="doi-link" id="doi_check_10.1002%2FADVS.202001274" target="_blank" rel="noopener noreferrer">10.1002/ADVS.202001274</a>
                         <div class="doi-title">Carbon-Based Composite Phase Change Materials for Thermal Energy Storage, Transfer, and Conversion</div>
                         <div class="doi-meta"> (2021)</div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.nanoms.2023.09.003" class="doi-link" target="_blank">10.1016/j.nanoms.2023.09.003</a>
+                        <a href="https://doi.org/10.1016%2Fj.nanoms.2023.09.003" class="doi-link" id="doi_check_10.1016%2Fj.nanoms.2023.09.003" target="_blank" rel="noopener noreferrer">10.1016/j.nanoms.2023.09.003</a>
                         <div class="doi-title">Recent advances in graphene-based phase change composites for thermal energy storage and management</div>
                         <div class="doi-meta"> (2024)</div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1038/s41598-018-27038-4" class="doi-link" target="_blank">10.1038/s41598-018-27038-4</a>
+                        <a href="https://doi.org/10.1038%2Fs41598-018-27038-4" class="doi-link" id="doi_check_10.1038%2Fs41598-018-27038-4" target="_blank" rel="noopener noreferrer">10.1038/s41598-018-27038-4</a>
                         <div class="doi-title">Fabrication and thermal properties of tetradecanol/graphene aerogel form-stable composite phase change materials</div>
                         <div class="doi-meta"> (2018)</div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1039/D0TA09035B" class="doi-link" target="_blank">10.1039/D0TA09035B</a>
+                        <a href="https://doi.org/10.1039%2FD0TA09035B" class="doi-link" id="doi_check_10.1039%2FD0TA09035B" target="_blank" rel="noopener noreferrer">10.1039/D0TA09035B</a>
                         <div class="doi-title">The design of phase change materials with carbon aerogel composites for multi-responsive thermal energy capture and storage</div>
                         <div class="doi-meta"> (2021)</div>
                     </li>
@@ -86,161 +91,459 @@
                 <h2>✗ Not in Library <span class="count-badge">51</span></h2>
                 <ul class="doi-list">
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1002/adfm.202212032" class="doi-link" target="_blank">10.1002/adfm.202212032</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1002%2Fadfm.202212032" class="doi-checkbox" aria-labelledby="doi_check_10.1002%2Fadfm.202212032">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1002%2Fadfm.202212032" class="doi-link" id="doi_check_10.1002%2Fadfm.202212032" target="_blank" rel="noopener noreferrer">10.1002/adfm.202212032</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1002/adma.201801754" class="doi-link" target="_blank">10.1002/adma.201801754</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1002%2Fadma.201801754" class="doi-checkbox" aria-labelledby="doi_check_10.1002%2Fadma.201801754">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1002%2Fadma.201801754" class="doi-link" id="doi_check_10.1002%2Fadma.201801754" target="_blank" rel="noopener noreferrer">10.1002/adma.201801754</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1002/adma.202202457" class="doi-link" target="_blank">10.1002/adma.202202457</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1002%2Fadma.202202457" class="doi-checkbox" aria-labelledby="doi_check_10.1002%2Fadma.202202457">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1002%2Fadma.202202457" class="doi-link" id="doi_check_10.1002%2Fadma.202202457" target="_blank" rel="noopener noreferrer">10.1002/adma.202202457</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1002/adma.202309723" class="doi-link" target="_blank">10.1002/adma.202309723</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1002%2Fadma.202309723" class="doi-checkbox" aria-labelledby="doi_check_10.1002%2Fadma.202309723">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1002%2Fadma.202309723" class="doi-link" id="doi_check_10.1002%2Fadma.202309723" target="_blank" rel="noopener noreferrer">10.1002/adma.202309723</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1002/aenm.202204208" class="doi-link" target="_blank">10.1002/aenm.202204208</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1002%2Faenm.202204208" class="doi-checkbox" aria-labelledby="doi_check_10.1002%2Faenm.202204208">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1002%2Faenm.202204208" class="doi-link" id="doi_check_10.1002%2Faenm.202204208" target="_blank" rel="noopener noreferrer">10.1002/aenm.202204208</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1002/cey2.218" class="doi-link" target="_blank">10.1002/cey2.218</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1002%2Fcey2.218" class="doi-checkbox" aria-labelledby="doi_check_10.1002%2Fcey2.218">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1002%2Fcey2.218" class="doi-link" id="doi_check_10.1002%2Fcey2.218" target="_blank" rel="noopener noreferrer">10.1002/cey2.218</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1002/sus2.147" class="doi-link" target="_blank">10.1002/sus2.147</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1002%2Fsus2.147" class="doi-checkbox" aria-labelledby="doi_check_10.1002%2Fsus2.147">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1002%2Fsus2.147" class="doi-link" id="doi_check_10.1002%2Fsus2.147" target="_blank" rel="noopener noreferrer">10.1002/sus2.147</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1007/s12274-016-1333-1" class="doi-link" target="_blank">10.1007/s12274-016-1333-1</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1007%2Fs12274-016-1333-1" class="doi-checkbox" aria-labelledby="doi_check_10.1007%2Fs12274-016-1333-1">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1007%2Fs12274-016-1333-1" class="doi-link" id="doi_check_10.1007%2Fs12274-016-1333-1" target="_blank" rel="noopener noreferrer">10.1007/s12274-016-1333-1</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1007/s42114-022-00519-x" class="doi-link" target="_blank">10.1007/s42114-022-00519-x</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1007%2Fs42114-022-00519-x" class="doi-checkbox" aria-labelledby="doi_check_10.1007%2Fs42114-022-00519-x">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1007%2Fs42114-022-00519-x" class="doi-link" id="doi_check_10.1007%2Fs42114-022-00519-x" target="_blank" rel="noopener noreferrer">10.1007/s42114-022-00519-x</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1007/s42114-022-00620-1" class="doi-link" target="_blank">10.1007/s42114-022-00620-1</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1007%2Fs42114-022-00620-1" class="doi-checkbox" aria-labelledby="doi_check_10.1007%2Fs42114-022-00620-1">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1007%2Fs42114-022-00620-1" class="doi-link" id="doi_check_10.1007%2Fs42114-022-00620-1" target="_blank" rel="noopener noreferrer">10.1007/s42114-022-00620-1</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1007/s42114-023-00655-y" class="doi-link" target="_blank">10.1007/s42114-023-00655-y</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1007%2Fs42114-023-00655-y" class="doi-checkbox" aria-labelledby="doi_check_10.1007%2Fs42114-023-00655-y">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1007%2Fs42114-023-00655-y" class="doi-link" id="doi_check_10.1007%2Fs42114-023-00655-y" target="_blank" rel="noopener noreferrer">10.1007/s42114-023-00655-y</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.apenergy.2018.12.075" class="doi-link" target="_blank">10.1016/j.apenergy.2018.12.075</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.apenergy.2018.12.075" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.apenergy.2018.12.075">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.apenergy.2018.12.075" class="doi-link" id="doi_check_10.1016%2Fj.apenergy.2018.12.075" target="_blank" rel="noopener noreferrer">10.1016/j.apenergy.2018.12.075</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.apenergy.2023.122546" class="doi-link" target="_blank">10.1016/j.apenergy.2023.122546</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.apenergy.2023.122546" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.apenergy.2023.122546">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.apenergy.2023.122546" class="doi-link" id="doi_check_10.1016%2Fj.apenergy.2023.122546" target="_blank" rel="noopener noreferrer">10.1016/j.apenergy.2023.122546</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.applthermaleng.2019.03.140" class="doi-link" target="_blank">10.1016/j.applthermaleng.2019.03.140</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.applthermaleng.2019.03.140" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.applthermaleng.2019.03.140">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.applthermaleng.2019.03.140" class="doi-link" id="doi_check_10.1016%2Fj.applthermaleng.2019.03.140" target="_blank" rel="noopener noreferrer">10.1016/j.applthermaleng.2019.03.140</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.applthermaleng.2019.114493" class="doi-link" target="_blank">10.1016/j.applthermaleng.2019.114493</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.applthermaleng.2019.114493" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.applthermaleng.2019.114493">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.applthermaleng.2019.114493" class="doi-link" id="doi_check_10.1016%2Fj.applthermaleng.2019.114493" target="_blank" rel="noopener noreferrer">10.1016/j.applthermaleng.2019.114493</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.carbon.2018.10.083" class="doi-link" target="_blank">10.1016/j.carbon.2018.10.083</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.carbon.2018.10.083" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.carbon.2018.10.083">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.carbon.2018.10.083" class="doi-link" id="doi_check_10.1016%2Fj.carbon.2018.10.083" target="_blank" rel="noopener noreferrer">10.1016/j.carbon.2018.10.083</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.cej.2019.122373" class="doi-link" target="_blank">10.1016/j.cej.2019.122373</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.cej.2019.122373" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.cej.2019.122373">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.cej.2019.122373" class="doi-link" id="doi_check_10.1016%2Fj.cej.2019.122373" target="_blank" rel="noopener noreferrer">10.1016/j.cej.2019.122373</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.cej.2021.130605" class="doi-link" target="_blank">10.1016/j.cej.2021.130605</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.cej.2021.130605" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.cej.2021.130605">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.cej.2021.130605" class="doi-link" id="doi_check_10.1016%2Fj.cej.2021.130605" target="_blank" rel="noopener noreferrer">10.1016/j.cej.2021.130605</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.compositesa.2021.106703" class="doi-link" target="_blank">10.1016/j.compositesa.2021.106703</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.compositesa.2021.106703" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.compositesa.2021.106703">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.compositesa.2021.106703" class="doi-link" id="doi_check_10.1016%2Fj.compositesa.2021.106703" target="_blank" rel="noopener noreferrer">10.1016/j.compositesa.2021.106703</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.compscitech.2020.108197" class="doi-link" target="_blank">10.1016/j.compscitech.2020.108197</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.compscitech.2020.108197" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.compscitech.2020.108197">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.compscitech.2020.108197" class="doi-link" id="doi_check_10.1016%2Fj.compscitech.2020.108197" target="_blank" rel="noopener noreferrer">10.1016/j.compscitech.2020.108197</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.conbuildmat.2023.132877" class="doi-link" target="_blank">10.1016/j.conbuildmat.2023.132877</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.conbuildmat.2023.132877" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.conbuildmat.2023.132877">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.conbuildmat.2023.132877" class="doi-link" id="doi_check_10.1016%2Fj.conbuildmat.2023.132877" target="_blank" rel="noopener noreferrer">10.1016/j.conbuildmat.2023.132877</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.enbuild.2022.112384" class="doi-link" target="_blank">10.1016/j.enbuild.2022.112384</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.enbuild.2022.112384" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.enbuild.2022.112384">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.enbuild.2022.112384" class="doi-link" id="doi_check_10.1016%2Fj.enbuild.2022.112384" target="_blank" rel="noopener noreferrer">10.1016/j.enbuild.2022.112384</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.enbuild.2023.112898" class="doi-link" target="_blank">10.1016/j.enbuild.2023.112898</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.enbuild.2023.112898" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.enbuild.2023.112898">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.enbuild.2023.112898" class="doi-link" id="doi_check_10.1016%2Fj.enbuild.2023.112898" target="_blank" rel="noopener noreferrer">10.1016/j.enbuild.2023.112898</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.energy.2022.125463" class="doi-link" target="_blank">10.1016/j.energy.2022.125463</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.energy.2022.125463" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.energy.2022.125463">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.energy.2022.125463" class="doi-link" id="doi_check_10.1016%2Fj.energy.2022.125463" target="_blank" rel="noopener noreferrer">10.1016/j.energy.2022.125463</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2018.11.007" class="doi-link" target="_blank">10.1016/j.est.2018.11.007</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2018.11.007" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2018.11.007">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2018.11.007" class="doi-link" id="doi_check_10.1016%2Fj.est.2018.11.007" target="_blank" rel="noopener noreferrer">10.1016/j.est.2018.11.007</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2019.100874" class="doi-link" target="_blank">10.1016/j.est.2019.100874</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2019.100874" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2019.100874">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2019.100874" class="doi-link" id="doi_check_10.1016%2Fj.est.2019.100874" target="_blank" rel="noopener noreferrer">10.1016/j.est.2019.100874</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2021.102329" class="doi-link" target="_blank">10.1016/j.est.2021.102329</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2021.102329" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2021.102329">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2021.102329" class="doi-link" id="doi_check_10.1016%2Fj.est.2021.102329" target="_blank" rel="noopener noreferrer">10.1016/j.est.2021.102329</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2021.103929" class="doi-link" target="_blank">10.1016/j.est.2021.103929</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2021.103929" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2021.103929">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2021.103929" class="doi-link" id="doi_check_10.1016%2Fj.est.2021.103929" target="_blank" rel="noopener noreferrer">10.1016/j.est.2021.103929</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2022.104166" class="doi-link" target="_blank">10.1016/j.est.2022.104166</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2022.104166" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2022.104166">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2022.104166" class="doi-link" id="doi_check_10.1016%2Fj.est.2022.104166" target="_blank" rel="noopener noreferrer">10.1016/j.est.2022.104166</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2022.106361" class="doi-link" target="_blank">10.1016/j.est.2022.106361</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2022.106361" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2022.106361">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2022.106361" class="doi-link" id="doi_check_10.1016%2Fj.est.2022.106361" target="_blank" rel="noopener noreferrer">10.1016/j.est.2022.106361</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2023.106772" class="doi-link" target="_blank">10.1016/j.est.2023.106772</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2023.106772" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2023.106772">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2023.106772" class="doi-link" id="doi_check_10.1016%2Fj.est.2023.106772" target="_blank" rel="noopener noreferrer">10.1016/j.est.2023.106772</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2023.107713" class="doi-link" target="_blank">10.1016/j.est.2023.107713</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2023.107713" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2023.107713">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2023.107713" class="doi-link" id="doi_check_10.1016%2Fj.est.2023.107713" target="_blank" rel="noopener noreferrer">10.1016/j.est.2023.107713</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2023.108280" class="doi-link" target="_blank">10.1016/j.est.2023.108280</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2023.108280" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2023.108280">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2023.108280" class="doi-link" id="doi_check_10.1016%2Fj.est.2023.108280" target="_blank" rel="noopener noreferrer">10.1016/j.est.2023.108280</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2024.111329" class="doi-link" target="_blank">10.1016/j.est.2024.111329</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2024.111329" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2024.111329">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2024.111329" class="doi-link" id="doi_check_10.1016%2Fj.est.2024.111329" target="_blank" rel="noopener noreferrer">10.1016/j.est.2024.111329</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.est.2024.111570" class="doi-link" target="_blank">10.1016/j.est.2024.111570</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.est.2024.111570" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.est.2024.111570">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.est.2024.111570" class="doi-link" id="doi_check_10.1016%2Fj.est.2024.111570" target="_blank" rel="noopener noreferrer">10.1016/j.est.2024.111570</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.jcis.2022.09.103" class="doi-link" target="_blank">10.1016/j.jcis.2022.09.103</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.jcis.2022.09.103" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.jcis.2022.09.103">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.jcis.2022.09.103" class="doi-link" id="doi_check_10.1016%2Fj.jcis.2022.09.103" target="_blank" rel="noopener noreferrer">10.1016/j.jcis.2022.09.103</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.jclepro.2022.133031" class="doi-link" target="_blank">10.1016/j.jclepro.2022.133031</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.jclepro.2022.133031" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.jclepro.2022.133031">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.jclepro.2022.133031" class="doi-link" id="doi_check_10.1016%2Fj.jclepro.2022.133031" target="_blank" rel="noopener noreferrer">10.1016/j.jclepro.2022.133031</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.mtsust.2023.100336" class="doi-link" target="_blank">10.1016/j.mtsust.2023.100336</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.mtsust.2023.100336" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.mtsust.2023.100336">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.mtsust.2023.100336" class="doi-link" id="doi_check_10.1016%2Fj.mtsust.2023.100336" target="_blank" rel="noopener noreferrer">10.1016/j.mtsust.2023.100336</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.mtsust.2023.100658" class="doi-link" target="_blank">10.1016/j.mtsust.2023.100658</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.mtsust.2023.100658" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.mtsust.2023.100658">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.mtsust.2023.100658" class="doi-link" id="doi_check_10.1016%2Fj.mtsust.2023.100658" target="_blank" rel="noopener noreferrer">10.1016/j.mtsust.2023.100658</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.rser.2023.113546" class="doi-link" target="_blank">10.1016/j.rser.2023.113546</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.rser.2023.113546" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.rser.2023.113546">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.rser.2023.113546" class="doi-link" id="doi_check_10.1016%2Fj.rser.2023.113546" target="_blank" rel="noopener noreferrer">10.1016/j.rser.2023.113546</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.seta.2021.101646" class="doi-link" target="_blank">10.1016/j.seta.2021.101646</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.seta.2021.101646" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.seta.2021.101646">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.seta.2021.101646" class="doi-link" id="doi_check_10.1016%2Fj.seta.2021.101646" target="_blank" rel="noopener noreferrer">10.1016/j.seta.2021.101646</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.solener.2017.03.013" class="doi-link" target="_blank">10.1016/j.solener.2017.03.013</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.solener.2017.03.013" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.solener.2017.03.013">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.solener.2017.03.013" class="doi-link" id="doi_check_10.1016%2Fj.solener.2017.03.013" target="_blank" rel="noopener noreferrer">10.1016/j.solener.2017.03.013</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.solmat.2021.111083" class="doi-link" target="_blank">10.1016/j.solmat.2021.111083</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.solmat.2021.111083" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.solmat.2021.111083">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.solmat.2021.111083" class="doi-link" id="doi_check_10.1016%2Fj.solmat.2021.111083" target="_blank" rel="noopener noreferrer">10.1016/j.solmat.2021.111083</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1016/j.solmat.2022.111896" class="doi-link" target="_blank">10.1016/j.solmat.2022.111896</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1016%2Fj.solmat.2022.111896" class="doi-checkbox" aria-labelledby="doi_check_10.1016%2Fj.solmat.2022.111896">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1016%2Fj.solmat.2022.111896" class="doi-link" id="doi_check_10.1016%2Fj.solmat.2022.111896" target="_blank" rel="noopener noreferrer">10.1016/j.solmat.2022.111896</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1021/acsami.8b09541" class="doi-link" target="_blank">10.1021/acsami.8b09541</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1021%2Facsami.8b09541" class="doi-checkbox" aria-labelledby="doi_check_10.1021%2Facsami.8b09541">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1021%2Facsami.8b09541" class="doi-link" id="doi_check_10.1021%2Facsami.8b09541" target="_blank" rel="noopener noreferrer">10.1021/acsami.8b09541</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1021/acsami.9b16612" class="doi-link" target="_blank">10.1021/acsami.9b16612</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1021%2Facsami.9b16612" class="doi-checkbox" aria-labelledby="doi_check_10.1021%2Facsami.9b16612">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1021%2Facsami.9b16612" class="doi-link" id="doi_check_10.1021%2Facsami.9b16612" target="_blank" rel="noopener noreferrer">10.1021/acsami.9b16612</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1021/acsnano.1c08581" class="doi-link" target="_blank">10.1021/acsnano.1c08581</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1021%2Facsnano.1c08581" class="doi-checkbox" aria-labelledby="doi_check_10.1021%2Facsnano.1c08581">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1021%2Facsnano.1c08581" class="doi-link" id="doi_check_10.1021%2Facsnano.1c08581" target="_blank" rel="noopener noreferrer">10.1021/acsnano.1c08581</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1039/c9ta13925g" class="doi-link" target="_blank">10.1039/c9ta13925g</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1039%2Fc9ta13925g" class="doi-checkbox" aria-labelledby="doi_check_10.1039%2Fc9ta13925g">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1039%2Fc9ta13925g" class="doi-link" id="doi_check_10.1039%2Fc9ta13925g" target="_blank" rel="noopener noreferrer">10.1039/c9ta13925g</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1080/09506608.2022.2053774" class="doi-link" target="_blank">10.1080/09506608.2022.2053774</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1080%2F09506608.2022.2053774" class="doi-checkbox" aria-labelledby="doi_check_10.1080%2F09506608.2022.2053774">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1080%2F09506608.2022.2053774" class="doi-link" id="doi_check_10.1080%2F09506608.2022.2053774" target="_blank" rel="noopener noreferrer">10.1080/09506608.2022.2053774</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.1080/15583724.2023.2220041" class="doi-link" target="_blank">10.1080/15583724.2023.2220041</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.1080%2F15583724.2023.2220041" class="doi-checkbox" aria-labelledby="doi_check_10.1080%2F15583724.2023.2220041">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.1080%2F15583724.2023.2220041" class="doi-link" id="doi_check_10.1080%2F15583724.2023.2220041" target="_blank" rel="noopener noreferrer">10.1080/15583724.2023.2220041</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="doi-item">
-                        <a href="https://doi.org/10.3390/su142013240" class="doi-link" target="_blank">10.3390/su142013240</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="check_10.3390%2Fsu142013240" class="doi-checkbox" aria-labelledby="doi_check_10.3390%2Fsu142013240">
+                            <div class="doi-content">
+                                <a href="https://doi.org/10.3390%2Fsu142013240" class="doi-link" id="doi_check_10.3390%2Fsu142013240" target="_blank" rel="noopener noreferrer">10.3390/su142013240</a>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.doi-checkbox');
+            const storageKey = 'mendeley_seen_dois';
+            
+            // Load saved state
+            let savedState = {};
+            try {
+                savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            } catch (e) {
+                console.warn('Invalid saved DOI state; resetting', e);
+                savedState = {};
+            }
+            
+            checkboxes.forEach(checkbox => {
+                const doiId = checkbox.id;
+                
+                // Restore state
+                if (savedState[doiId]) {
+                    checkbox.checked = true;
+                    checkbox.closest('.doi-item').classList.add('checked');
+                }
+                
+                // Add change listener
+                checkbox.addEventListener('change', function() {
+                    // Update state object
+                    if (this.checked) {
+                        savedState[doiId] = true;
+                    } else {
+                        delete savedState[doiId];
+                    }
+                    this.closest('.doi-item').classList.toggle('checked', this.checked);
+                    
+                    // Save to local storage
+                    try {
+                        localStorage.setItem(storageKey, JSON.stringify(savedState));
+                    } catch (e) {
+                        console.warn('Unable to persist DOI state', e);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

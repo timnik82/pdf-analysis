@@ -142,6 +142,11 @@ def generate_html_table(results: dict, output_html: str):
         .doi-title {{ color: #2c3e50; font-size: 0.9em; margin-top: 5px; line-height: 1.4; }}
         .doi-meta {{ color: #7f8c8d; font-size: 0.85em; margin-top: 5px; }}
         .count-badge {{ display: inline-block; background: rgba(255, 255, 255, 0.3); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; margin-left: 10px; }}
+        .doi-checkbox {{ margin-right: 15px; transform: scale(1.5); cursor: pointer; }}
+        .doi-item.checked {{ opacity: 0.6; background: #e9ecef; }}
+        .doi-item.checked .doi-link {{ text-decoration: line-through; color: #95a5a6; }}
+        .doi-flex {{ display: flex; align-items: flex-start; }}
+        .doi-content {{ flex: 1; }}
         @media (max-width: 968px) {{ .table-container {{ grid-template-columns: 1fr; }} }}
         .empty-message {{ text-align: center; color: #95a5a6; padding: 40px 20px; font-style: italic; }}
     </style>
@@ -182,7 +187,7 @@ def generate_html_table(results: dict, output_html: str):
             doi_url = f"https://doi.org/{url_quote(doc['doi'], safe='')}"
             year_str = f" ({html.escape(str(doc['year']))})" if doc.get("year") else ""
             html_content += f'''                    <li class="doi-item">
-                        <a href="{doi_url}" class="doi-link" target="_blank">{doi_escaped}</a>
+                        <a href="{doi_url}" class="doi-link" target="_blank" rel="noopener noreferrer">{doi_escaped}</a>
                         <div class="doi-title">{title_escaped}</div>
                         <div class="doi-meta">{year_str}</div>
                     </li>
@@ -203,8 +208,14 @@ def generate_html_table(results: dict, output_html: str):
         for doi in not_in_library:
             doi_escaped = html.escape(doi)
             doi_url = f"https://doi.org/{url_quote(doi, safe='')}"
+            doi_id = f"check_{url_quote(doi, safe='')}"  # Safe ID for checkbox
             html_content += f'''                    <li class="doi-item">
-                        <a href="{doi_url}" class="doi-link" target="_blank">{doi_escaped}</a>
+                        <div class="doi-flex">
+                            <input type="checkbox" id="{doi_id}" class="doi-checkbox" aria-labelledby="doi_{doi_id}">
+                            <div class="doi-content">
+                                <a href="{doi_url}" class="doi-link" id="doi_{doi_id}" target="_blank" rel="noopener noreferrer">{doi_escaped}</a>
+                            </div>
+                        </div>
                     </li>
 '''
     else:
@@ -214,6 +225,49 @@ def generate_html_table(results: dict, output_html: str):
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.doi-checkbox');
+            const storageKey = 'mendeley_seen_dois';
+            
+            // Load saved state
+            let savedState = {};
+            try {
+                savedState = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            } catch (e) {
+                console.warn('Invalid saved DOI state; resetting', e);
+                savedState = {};
+            }
+            
+            checkboxes.forEach(checkbox => {
+                const doiId = checkbox.id;
+                
+                // Restore state
+                if (savedState[doiId]) {
+                    checkbox.checked = true;
+                    checkbox.closest('.doi-item').classList.add('checked');
+                }
+                
+                // Add change listener
+                checkbox.addEventListener('change', function() {
+                    // Update state object
+                    if (this.checked) {
+                        savedState[doiId] = true;
+                    } else {
+                        delete savedState[doiId];
+                    }
+                    this.closest('.doi-item').classList.toggle('checked', this.checked);
+                    
+                    // Save to local storage
+                    try {
+                        localStorage.setItem(storageKey, JSON.stringify(savedState));
+                    } catch (e) {
+                        console.warn('Unable to persist DOI state', e);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 """
