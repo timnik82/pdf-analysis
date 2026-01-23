@@ -11,6 +11,8 @@ PDF section extraction tool for academic papers. Converts PDFs to markdown, then
 ```
 pdf-analysis/
 ├── extract_sections.py   # Main extraction script
+├── clean_marker_output.py  # Remove publisher footers and trim end sections
+├── convert_pdfs.sh       # Marker conversion wrapper + cleanup
 ├── requirements.txt      # Dependencies (pymupdf4llm, rapidfuzz)
 ├── pdfs/                 # Input PDFs (gitignored)
 ├── extracted_sections.json  # JSON output (gitignored)
@@ -64,6 +66,23 @@ pdf-analysis/
 source venv/bin/activate
 python extract_sections.py
 # Check extracted_sections.md for results
+```
+
+## Post-processing Marker output
+
+- `clean_marker_output.py` removes common publisher footers and trims references and other end sections.
+- Run it after conversion to clean all Markdown files:
+
+```bash
+python3 clean_marker_output.py /home/timnik/coding/pdf-analysis/markdown
+```
+
+## Marker conversion wrapper
+
+- `convert_pdfs.sh` runs Marker conversion then cleans the output.
+
+```bash
+/home/timnik/coding/pdf-analysis/convert_pdfs.sh
 ```
 
 ## Dependencies
