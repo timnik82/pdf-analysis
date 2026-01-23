@@ -6,6 +6,7 @@ Convert PDFs to cleaned Markdown using pymupdf4llm.
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 import pymupdf4llm
@@ -72,13 +73,15 @@ def main() -> int:
         print("No PDF files found.")
         return 1
 
+    had_errors = False
     for pdf_path in pdf_files:
         try:
             convert_pdf(pdf_path, args.out_dir, args.overwrite)
         except Exception as exc:
-            print(f"Error converting {pdf_path}: {exc}")
+            print(f"Error converting {pdf_path}: {exc}", file=sys.stderr)
+            had_errors = True
 
-    return 0
+    return 1 if had_errors else 0
 
 
 if __name__ == "__main__":

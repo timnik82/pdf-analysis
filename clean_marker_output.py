@@ -17,7 +17,7 @@ FOOTER_PATTERNS = [
 ]
 
 FIGURE_PATTERNS = [
-    re.compile(r"^\s*!\[.*\]\(.*\)\s*$"),  # Markdown image tags
+    re.compile(r"^\s*!\[[^\]]*\]\([^)]*\)\s*$"),  # Markdown image tags
     re.compile(r"^\s*<img[^>]*>\s*$", re.IGNORECASE),  # HTML image tags
     re.compile(r"^\s*(figure|fig\.?)\s*\d+\s*[:.]", re.IGNORECASE),  # Captions
 ]
