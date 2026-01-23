@@ -16,7 +16,13 @@ FOOTER_PATTERNS = [
     re.compile(r"OA articles are governed by", re.IGNORECASE),
 ]
 
-REFERENCE_START_PATTERNS = [
+FIGURE_PATTERNS = [
+    re.compile(r"^\s*!\[[^\]]*\]\([^)]*\)\s*$"),  # Markdown image tags
+    re.compile(r"^\s*<img[^>]*>\s*$", re.IGNORECASE),  # HTML image tags
+    re.compile(r"^\s*(figure|fig\.?)\s*\d+\s*[:.]", re.IGNORECASE),  # Captions
+]
+
+HARD_END_PATTERNS = [
     re.compile(r"^\s*#{1,6}\s*(references|bibliography)\b", re.IGNORECASE),
     re.compile(r"^\s*(references|bibliography)\s*$", re.IGNORECASE),
     re.compile(r"^\s*-\s*\[\d+\]\s+", re.IGNORECASE),
@@ -25,6 +31,21 @@ REFERENCE_START_PATTERNS = [
     re.compile(r"^\s*#{1,6}\s*conflict of interest\b", re.IGNORECASE),
     re.compile(r"^\s*#{1,6}\s*data availability\b", re.IGNORECASE),
 ]
+
+SOFT_END_PATTERNS = [
+    re.compile(
+        r"^\s*(supporting information|acknowledg(e)?ments|conflict of interest)\s*$",
+        re.IGNORECASE,
+    ),
+    re.compile(r"^\s*data availability( statement)?\s*$", re.IGNORECASE),
+    re.compile(r"^\s*keywords?\s*$", re.IGNORECASE),
+    re.compile(
+        r"^\s*(?:\[\d+\]|\d+\.|\d+\)|\d+)\s+[A-Z].*\b(19|20)\d{2}\b",
+        re.IGNORECASE,
+    ),
+]
+SOFT_END_MIN_LINE_FRACTION = 0.4
+SOFT_END_MIN_LINE_INDEX = 20
 
 
 def iter_markdown_files(paths: Iterable[Path]) -> List[Path]:
@@ -47,11 +68,28 @@ def strip_footer_lines(lines: List[str]) -> List[str]:
     ]
 
 
+def strip_figure_lines(lines: List[str]) -> List[str]:
+    """Remove image tags and figure caption lines."""
+    return [
+        line
+        for line in lines
+        if not any(pattern.search(line) for pattern in FIGURE_PATTERNS)
+    ]
+
+
 def strip_references(lines: List[str]) -> List[str]:
-    """Trim content at the first detected reference-like heading or list."""
+    """Trim content at the first detected reference-like heading or end section."""
+    total_lines = len(lines)
+    soft_start_idx = max(
+        int(total_lines * SOFT_END_MIN_LINE_FRACTION), SOFT_END_MIN_LINE_INDEX
+    )
     for idx, line in enumerate(lines):
         normalized = re.sub(r"[*_`]", "", line)
-        if any(pattern.search(normalized) for pattern in REFERENCE_START_PATTERNS):
+        if any(pattern.search(normalized) for pattern in HARD_END_PATTERNS):
+            return lines[:idx]
+        if idx >= soft_start_idx and any(
+            pattern.search(normalized) for pattern in SOFT_END_PATTERNS
+        ):
             return lines[:idx]
     return lines
 
@@ -67,6 +105,7 @@ def clean_markdown(text: str) -> str:
     """Clean a markdown document string."""
     lines = text.splitlines()
     lines = strip_footer_lines(lines)
+    lines = strip_figure_lines(lines)
     lines = strip_references(lines)
     lines = normalize_trailing_blank_lines(lines)
     return "\n".join(lines) + "\n"
