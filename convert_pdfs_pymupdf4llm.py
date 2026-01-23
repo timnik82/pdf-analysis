@@ -16,7 +16,11 @@ from clean_marker_output import clean_markdown
 def iter_pdf_files(pdf_dir: Path) -> list[Path]:
     """Collect PDF files from a directory."""
     return sorted(
-        [path for path in pdf_dir.iterdir() if path.is_file() and path.suffix.lower() == ".pdf"]
+        [
+            path
+            for path in pdf_dir.iterdir()
+            if path.is_file() and path.suffix.lower() == ".pdf"
+        ]
     )
 
 
