@@ -22,7 +22,7 @@ FIGURE_PATTERNS = [
     re.compile(r"^\s*(figure|fig\.?)\s*\d+\s*[:.]", re.IGNORECASE),  # Captions
 ]
 
-REFERENCE_START_PATTERNS = [
+HARD_END_PATTERNS = [
     re.compile(r"^\s*#{1,6}\s*(references|bibliography)\b", re.IGNORECASE),
     re.compile(r"^\s*(references|bibliography)\s*$", re.IGNORECASE),
     re.compile(r"^\s*-\s*\[\d+\]\s+", re.IGNORECASE),
@@ -31,6 +31,21 @@ REFERENCE_START_PATTERNS = [
     re.compile(r"^\s*#{1,6}\s*conflict of interest\b", re.IGNORECASE),
     re.compile(r"^\s*#{1,6}\s*data availability\b", re.IGNORECASE),
 ]
+
+SOFT_END_PATTERNS = [
+    re.compile(
+        r"^\s*(supporting information|acknowledg(e)?ments|conflict of interest)\s*$",
+        re.IGNORECASE,
+    ),
+    re.compile(r"^\s*data availability( statement)?\s*$", re.IGNORECASE),
+    re.compile(r"^\s*keywords?\s*$", re.IGNORECASE),
+    re.compile(
+        r"^\s*(?:\[\d+\]|\d+\.|\d+\)|\d+)\s+[A-Z].*\b(19|20)\d{2}\b",
+        re.IGNORECASE,
+    ),
+]
+SOFT_END_MIN_LINE_FRACTION = 0.4
+SOFT_END_MIN_LINE_INDEX = 20
 
 
 def iter_markdown_files(paths: Iterable[Path]) -> List[Path]:
@@ -63,10 +78,18 @@ def strip_figure_lines(lines: List[str]) -> List[str]:
 
 
 def strip_references(lines: List[str]) -> List[str]:
-    """Trim content at the first detected reference-like heading or list."""
+    """Trim content at the first detected reference-like heading or end section."""
+    total_lines = len(lines)
+    soft_start_idx = max(
+        int(total_lines * SOFT_END_MIN_LINE_FRACTION), SOFT_END_MIN_LINE_INDEX
+    )
     for idx, line in enumerate(lines):
         normalized = re.sub(r"[*_`]", "", line)
-        if any(pattern.search(normalized) for pattern in REFERENCE_START_PATTERNS):
+        if any(pattern.search(normalized) for pattern in HARD_END_PATTERNS):
+            return lines[:idx]
+        if idx >= soft_start_idx and any(
+            pattern.search(normalized) for pattern in SOFT_END_PATTERNS
+        ):
             return lines[:idx]
     return lines
 
