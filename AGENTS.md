@@ -66,6 +66,23 @@ python extract_sections.py
 # Check extracted_sections.md for results
 ```
 
+## Post-processing Marker output
+
+- `clean_marker_output.py` removes common publisher footers and trims references and other end sections.
+- Run it after conversion to clean all Markdown files:
+
+```bash
+python3 clean_marker_output.py /home/timnik/coding/pdf-analysis/markdown
+```
+
+## Marker conversion wrapper
+
+- `convert_pdfs.sh` runs Marker conversion then cleans the output.
+
+```bash
+/home/timnik/coding/pdf-analysis/convert_pdfs.sh
+```
+
 ## Dependencies
 
 - `pymupdf4llm` - PDF to Markdown conversion
