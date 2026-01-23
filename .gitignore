@@ -28,3 +28,6 @@ files/
 # Mendeley API credentials and tokens
 .env
 mendeley_token.json
+
+# Firebase credentials
+firebase-config.json
