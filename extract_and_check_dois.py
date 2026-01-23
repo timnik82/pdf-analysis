@@ -265,9 +265,10 @@ def generate_html_table(results: dict, output_html: str):
         for doi in not_in_library:
             doi_escaped = html.escape(doi)
             doi_url = f"https://doi.org/{url_quote(doi, safe='')}"
-            # Firebase keys cannot contain '.', '#', '$', '[', ']'.
-            # url_quote leaves '.' by default. We must replace it.
-            safe_id_suffix = url_quote(doi, safe="").replace(".", "_")
+            # Firebase keys cannot contain '.', '#', '$', '[', ']', or '/'.
+            # Replace '.' and '/' with '_' first, then URL-encode remaining special chars.
+            safe_id_suffix = doi.replace(".", "_").replace("/", "_")
+            safe_id_suffix = url_quote(safe_id_suffix, safe="")
             doi_id = f"check_{safe_id_suffix}"
             html_content += f'''                    <li class="doi-item">
                         <div class="doi-flex">
@@ -305,12 +306,18 @@ def generate_html_table(results: dict, output_html: str):
 
             // Monitor Auth State
             onAuthStateChanged(auth, (user) => {{
+                // Clean up previous listener to prevent memory leaks
+                if (unsubscribe) {{
+                    unsubscribe();
+                    unsubscribe = null;
+                }}
+
                 if (user) {{
                     authStatus.textContent = `✓ Connected as ${{user.uid.substring(0,6)}}... (Session Scoped)`;
                     authStatus.style.color = 'green';
 
                     const userRefPath = `checked_dois/${{user.uid}}`;
-                    dbRef = ref(database, userRefPath);
+                    const dbRef = ref(database, userRefPath);
 
                     // Listen for changes
                     unsubscribe = onValue(dbRef, (snapshot) => {{

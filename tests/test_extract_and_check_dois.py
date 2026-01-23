@@ -279,8 +279,8 @@ class TestDoiKeySanitization:
             generate_html_table(results, str(output_file))
 
         html_content = output_file.read_text()
-        # The checkbox id should have dots replaced with underscores
-        assert 'id="check_10_1038%2Fnature_12345"' in html_content
+        # The checkbox id should have dots and slashes replaced with underscores
+        assert 'id="check_10_1038_nature_12345"' in html_content
         # Original DOI should still be displayed
         assert "10.1038/nature.12345" in html_content
 
@@ -302,5 +302,5 @@ class TestDoiKeySanitization:
             generate_html_table(results, str(output_file))
 
         html_content = output_file.read_text()
-        # Special chars should be URL-encoded and dots replaced
-        assert "check_10_1000%2Fxyz%23abc" in html_content
+        # Dots and slashes replaced with underscores, other special chars URL-encoded
+        assert 'id="check_10_1000_xyz%23abc"' in html_content
