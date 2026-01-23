@@ -24,6 +24,7 @@ extracted_sections.json
 extracted_sections.md
 pdfs/
 files/
+markdown/
 
 # Mendeley API credentials and tokens
 .env
