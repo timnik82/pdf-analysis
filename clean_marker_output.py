@@ -6,10 +6,9 @@ Clean Marker-generated Markdown by removing publisher footers and references.
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 import re
+from pathlib import Path
 from typing import Iterable, List
-
 
 FOOTER_PATTERNS = [
     re.compile(r"Downloaded from .*Wiley Online Library", re.IGNORECASE),
