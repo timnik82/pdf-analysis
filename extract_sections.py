@@ -527,18 +527,30 @@ def process_pdfs(pdf_dir, output_file):
         except Exception as e:
             print(f"  Error processing {filename}: {e}")
 
+    # Determine output path: if output_file contains no directory, place it inside pdf_dir
+    output_dir_part = os.path.dirname(output_file)
+    if output_dir_part:
+        output_path = output_file
+    else:
+        output_path = os.path.join(pdf_dir, output_file)
+
+    # Ensure parent directory exists (if caller provided a path)
+    parent_dir = os.path.dirname(output_path)
+    if parent_dir:
+        os.makedirs(parent_dir, exist_ok=True)
+
     # Save to JSON
-    with open(output_file, "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
 
-    print(f"\nJSON extraction saved to {output_file}")
+    print(f"\nJSON extraction saved to {output_path}")
 
-    # Save to Markdown for LLM consumption
-    markdown_file = output_file.replace(".json", ".md")
+    # Save to Markdown for LLM consumption (same folder as JSON)
+    markdown_file = output_path.replace(".json", ".md")
     export_to_markdown(results, markdown_file)
 
     print("\n✓ Extraction complete. Output files:")
-    print(f"  - {output_file} (JSON, for programmatic access)")
+    print(f"  - {output_path} (JSON, for programmatic access)")
     print(f"  - {markdown_file} (Markdown, for LLM analysis)")
 
 
