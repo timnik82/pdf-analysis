@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PDF_DIR="/home/timnik/coding/pdf-analysis/pdfs"
-OUT_DIR="/home/timnik/coding/pdf-analysis/markdown"
-CLEANER="/home/timnik/coding/pdf-analysis/clean_marker_output.py"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PDF_DIR="${PDF_DIR:-$SCRIPT_DIR/pdfs}"
+OUT_DIR="${OUT_DIR:-$SCRIPT_DIR/markdown}"
+CLEANER="${CLEANER:-$SCRIPT_DIR/clean_marker_output.py}"
 
 marker "$PDF_DIR" \
   --output_dir "$OUT_DIR" \

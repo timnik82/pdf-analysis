@@ -28,6 +28,7 @@ REFERENCE_START_PATTERNS = [
 
 
 def iter_markdown_files(paths: Iterable[Path]) -> List[Path]:
+    """Collect markdown files from file/dir inputs."""
     files: List[Path] = []
     for path in paths:
         if path.is_dir():
@@ -38,6 +39,7 @@ def iter_markdown_files(paths: Iterable[Path]) -> List[Path]:
 
 
 def strip_footer_lines(lines: List[str]) -> List[str]:
+    """Remove lines that match known publisher footer patterns."""
     return [
         line
         for line in lines
@@ -46,6 +48,7 @@ def strip_footer_lines(lines: List[str]) -> List[str]:
 
 
 def strip_references(lines: List[str]) -> List[str]:
+    """Trim content at the first detected reference-like heading or list."""
     for idx, line in enumerate(lines):
         normalized = re.sub(r"[*_`]", "", line)
         if any(pattern.search(normalized) for pattern in REFERENCE_START_PATTERNS):
@@ -54,12 +57,14 @@ def strip_references(lines: List[str]) -> List[str]:
 
 
 def normalize_trailing_blank_lines(lines: List[str]) -> List[str]:
+    """Remove trailing blank lines for consistent output."""
     while lines and not lines[-1].strip():
         lines.pop()
     return lines
 
 
 def clean_markdown(text: str) -> str:
+    """Clean a markdown document string."""
     lines = text.splitlines()
     lines = strip_footer_lines(lines)
     lines = strip_references(lines)
@@ -68,6 +73,7 @@ def clean_markdown(text: str) -> str:
 
 
 def main() -> int:
+    """Entry point for cleaning markdown files in place."""
     parser = argparse.ArgumentParser(
         description="Remove common publisher footers and references from Markdown."
     )
