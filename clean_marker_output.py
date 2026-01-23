@@ -16,6 +16,12 @@ FOOTER_PATTERNS = [
     re.compile(r"OA articles are governed by", re.IGNORECASE),
 ]
 
+FIGURE_PATTERNS = [
+    re.compile(r"^\s*!\[.*\]\(.*\)\s*$"),  # Markdown image tags
+    re.compile(r"^\s*<img[^>]*>\s*$", re.IGNORECASE),  # HTML image tags
+    re.compile(r"^\s*(figure|fig\.?)\s*\d+\s*[:.]", re.IGNORECASE),  # Captions
+]
+
 REFERENCE_START_PATTERNS = [
     re.compile(r"^\s*#{1,6}\s*(references|bibliography)\b", re.IGNORECASE),
     re.compile(r"^\s*(references|bibliography)\s*$", re.IGNORECASE),
@@ -47,6 +53,15 @@ def strip_footer_lines(lines: List[str]) -> List[str]:
     ]
 
 
+def strip_figure_lines(lines: List[str]) -> List[str]:
+    """Remove image tags and figure caption lines."""
+    return [
+        line
+        for line in lines
+        if not any(pattern.search(line) for pattern in FIGURE_PATTERNS)
+    ]
+
+
 def strip_references(lines: List[str]) -> List[str]:
     """Trim content at the first detected reference-like heading or list."""
     for idx, line in enumerate(lines):
@@ -67,6 +82,7 @@ def clean_markdown(text: str) -> str:
     """Clean a markdown document string."""
     lines = text.splitlines()
     lines = strip_footer_lines(lines)
+    lines = strip_figure_lines(lines)
     lines = strip_references(lines)
     lines = normalize_trailing_blank_lines(lines)
     return "\n".join(lines) + "\n"
